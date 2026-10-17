@@ -1,8 +1,10 @@
-# Explicit approval required before GitHub beta publication
+# Scanner beta release checklist
 
-All items are pending unless a private signed owner record identifies exact scope,
-reviewer, date, source inventory hashes and archive checksum. This file is preparation,
-not permission. Keep package private; no npm release is authorized by GitHub approval.
+The scanner source repository is public and GitHub private vulnerability reporting
+is enabled. Source visibility does not authorize a GitHub release asset or npm
+publication. For each future release, record exact scope, reviewer, date, source
+commit and archive checksum. The review items below are not assertions that every
+operational acceptance check has passed. Keep the package private.
 
 - [ ] Founder approves separate public repository name/account/organization and access.
 - [ ] Founder approves public copyright/author/historical credit, commit identity,
@@ -20,7 +22,7 @@ not permission. Keep package private; no npm release is authorized by GitHub app
 - [ ] Human tests macOS/Ubuntu first-run and sanitized feedback workflow; Windows
       remains unverified until exercised. Do not invent tester participation.
 - [ ] Confidential email handling/replies and backup responder verified. GitHub private
-      reporting remains unavailable until enabled and tested on the actual repository.
+      reporting is enabled; verify its availability and confidential handling for each release.
 - [ ] Review pinned least-privilege scanner-only CI, actual job names and required
       branch checks; verify enforcement/bypasses on the chosen account plan.
 - [ ] Replace all candidate/pending URL wording only with approved actual release
@@ -32,5 +34,6 @@ not permission. Keep package private; no npm release is authorized by GitHub app
 
 After publication only: verify public contents, links, issue/reporting intake and
 release checksum. Any unexpected sensitive disclosure stops distribution and enters
-private incident handling; deletion cannot undo prior copies. Do not assume any
-release, public repository or current merge protection exists today.
+private incident handling; deletion cannot undo prior copies. Public source
+availability does not establish a published release or successful
+operational acceptance; verify current merge protection rather than assuming it.
