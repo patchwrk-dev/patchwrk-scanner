@@ -1,0 +1,2 @@
+// SYNTHETIC REPOSITORY EXAMPLE ONLY
+export {client as api} from './client.js';

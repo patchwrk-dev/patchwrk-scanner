@@ -1,0 +1,201 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "3",
+  "changes": [
+    {
+      "provider": "openai",
+      "id": "openai.gpt-4-0314.retirement",
+      "title": "Retirement of gpt-4-0314",
+      "description": "The current provider deprecation table gives 2026-03-26 as the shutdown date for the exact gpt-4-0314 snapshot.",
+      "officialSourceUrl": "https://developers.openai.com/api/docs/deprecations",
+      "publicationDate": "2025-09-26",
+      "effectiveDate": null,
+      "retirementDate": "2026-03-26",
+      "category": "deprecation",
+      "affectedSdks": [],
+      "affectedApiVersions": [],
+      "targets": [
+        {
+          "kind": "model",
+          "value": "gpt-4-0314"
+        }
+      ],
+      "migrationInstructions": "Review the provider-listed replacements gpt-5 or gpt-4.1 (the latter for latency-sensitive tasks without reasoning), and test behavior before choosing. This historical replacement advice is not a claim of current availability.",
+      "evidence": [
+        {
+          "sourceUrl": "https://developers.openai.com/api/docs/deprecations",
+          "locator": "2025-09-26: Legacy GPT model snapshots (March 2026 shutdown) / gpt-4-0314 row",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "official",
+        "sources": [
+          {
+            "url": "https://developers.openai.com/api/docs/deprecations",
+            "retrievedAt": "2026-10-17T20:52:30Z"
+          }
+        ],
+        "notes": "Exact model identifier only. No SDK constraint, API-version inference or automatic migration. Earlier at-earliest retirement guidance on the same page is superseded by this dated table. First-party Codex source review, not founder approval or a third-party audit."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "manual-official-review",
+        "reviewer": "Codex Task 045 official-source review"
+      },
+      "lastReviewedAt": "2026-10-17T20:52:30Z"
+    },
+    {
+      "provider": "openai",
+      "id": "openai.text-davinci-003.retirement",
+      "title": "Retirement of text-davinci-003",
+      "description": "The official retirement table lists text-davinci-003 with shutdown on 2024-01-04.",
+      "officialSourceUrl": "https://developers.openai.com/api/docs/deprecations",
+      "publicationDate": "2023-07-06",
+      "effectiveDate": null,
+      "retirementDate": "2024-01-04",
+      "category": "deprecation",
+      "affectedSdks": [],
+      "affectedApiVersions": [],
+      "targets": [
+        {
+          "kind": "model",
+          "value": "text-davinci-003"
+        }
+      ],
+      "migrationInstructions": "The historical replacement gpt-3.5-turbo-instruct is also listed as retired on 2026-09-28. Consult current provider deprecations and supported alternatives, then test behavior; do not blindly apply an old replacement recommendation.",
+      "evidence": [
+        {
+          "sourceUrl": "https://developers.openai.com/api/docs/deprecations",
+          "locator": "2023-07-06: GPT and embeddings / InstructGPT models / text-davinci-003 row",
+          "excerpt": null
+        },
+        {
+          "sourceUrl": "https://developers.openai.com/api/docs/deprecations",
+          "locator": "2025-09-26: Legacy GPT model snapshots / gpt-3.5-turbo-instruct row",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "official",
+        "sources": [
+          {
+            "url": "https://developers.openai.com/api/docs/deprecations",
+            "retrievedAt": "2026-10-17T20:52:30Z"
+          }
+        ],
+        "notes": "Exact retired model identifier, not an SDK range or API-version identifier. Served through the completions endpoint; no package-version constraint is inferred."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "manual-official-review",
+        "reviewer": "Codex Task 045 official-source review"
+      },
+      "lastReviewedAt": "2026-10-17T20:52:30Z"
+    },
+    {
+      "provider": "stripe",
+      "id": "stripe.sdk12.removed-constructor-aliases",
+      "title": "SDK 12.0.0 removes Stripe.default and Stripe.Stripe",
+      "description": "The provider release removes the compatibility properties Stripe.default and Stripe.Stripe.",
+      "officialSourceUrl": "https://github.com/stripe/stripe-node/releases/tag/v12.0.0",
+      "publicationDate": "2023-04-06",
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "breaking-change",
+      "affectedSdks": [
+        {
+          "packageName": "stripe",
+          "versionRange": "12.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [
+        {
+          "kind": "sdk-symbol",
+          "value": "Stripe.default"
+        },
+        {
+          "kind": "sdk-symbol",
+          "value": "Stripe.Stripe"
+        }
+      ],
+      "migrationInstructions": "Use Stripe directly instead of Stripe.default or Stripe.Stripe, following the v12 migration guide. Review imports and test locally; the scanner does not establish that either removed property is used.",
+      "evidence": [
+        {
+          "sourceUrl": "https://github.com/stripe/stripe-node/releases/tag/v12.0.0",
+          "locator": "v12.0.0 release / #1743 Remove Stripe.default and Stripe.Stripe",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "official",
+        "sources": [
+          {
+            "url": "https://github.com/stripe/stripe-node/releases/tag/v12.0.0",
+            "retrievedAt": "2026-10-17T20:52:30Z"
+          },
+          {
+            "url": "https://github.com/stripe/stripe-node/wiki/Migration-guide-for-v12",
+            "retrievedAt": "2026-10-17T20:52:30Z"
+          }
+        ],
+        "notes": "Exact release scope only; no later-version range inferred. SDK applicability is not proof of symbol usage or runtime breakage. No API version is derived from the SDK. First-party Codex source review, not founder approval or a third-party audit."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "manual-official-review",
+        "reviewer": "Codex Task 045 official-source review"
+      },
+      "lastReviewedAt": "2026-10-17T20:52:30Z"
+    },
+    {
+      "provider": "stripe",
+      "id": "stripe.sdk8.request-option-rename",
+      "title": "SDK 8.0.0 renames stripeVersion request option",
+      "description": "The v8 migration guide renames the stripeVersion request option to apiVersion; the old spelling continues working with a warning.",
+      "officialSourceUrl": "https://github.com/stripe/stripe-node/wiki/Migration-guide-for-v8",
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "nonbreaking-change",
+      "affectedSdks": [
+        {
+          "packageName": "stripe",
+          "versionRange": "8.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [
+        {
+          "kind": "sdk-symbol",
+          "value": "stripeVersion"
+        }
+      ],
+      "migrationInstructions": "Rename the request option stripeVersion to apiVersion.",
+      "evidence": [
+        {
+          "sourceUrl": "https://github.com/stripe/stripe-node/wiki/Migration-guide-for-v8",
+          "locator": "Summary: stripe-node version 8.0.0; Rename the request option stripeVersion to apiVersion",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "official",
+        "sources": [
+          {
+            "url": "https://github.com/stripe/stripe-node/wiki/Migration-guide-for-v8",
+            "retrievedAt": "2026-10-14T18:19:06Z"
+          }
+        ],
+        "notes": "Exact release scope only. No later SDK range is inferred. The wiki edit date is not treated as a publication date."
+      },
+      "verification": {
+        "status": "verified",
+        "method": "manual-official-review",
+        "reviewer": "Codex Task 006 official-source review"
+      },
+      "lastReviewedAt": "2026-10-14T18:19:06Z"
+    }
+  ]
+}

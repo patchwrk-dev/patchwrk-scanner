@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Confidential vulnerability report
+    url: mailto:security@patchwrk.dev
+    about: Agree secure handling first; do not attach credentials or private source.
+  - name: Developer support
+    url: mailto:support@patchwrk.dev
+    about: Best-effort support; no response-time commitment.

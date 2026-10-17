@@ -1,0 +1,12 @@
+const Stripe = require('stripe');
+const { OpenAI: AI } = require('openai');
+const Anthropic = require('@anthropic-ai/sdk');
+const { shopifyApi } = require('@shopify/shopify-api');
+const twilio = require('twilio');
+
+new Stripe(process.env.STRIPE_API_KEY);
+new AI();
+new Anthropic();
+shopifyApi({});
+twilio();
+require('twilio')();

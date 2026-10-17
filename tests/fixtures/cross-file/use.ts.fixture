@@ -1,0 +1,3 @@
+// SYNTHETIC REPOSITORY EXAMPLE ONLY
+import {api as renamed} from './barrel';
+renamed.completions.create({model:'text-davinci-003'});

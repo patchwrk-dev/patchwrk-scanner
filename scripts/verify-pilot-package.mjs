@@ -1,0 +1,85 @@
+import { mkdtemp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import assert from 'node:assert/strict';
+import console from 'node:console';
+import process from 'node:process';
+
+const publicCandidate=process.argv[2]==='--public-candidate';
+assert.ok(process.argv.length===2||(process.argv.length===3&&publicCandidate),'Unsupported verification mode');
+const root = process.cwd();
+const pkg = JSON.parse(await readFile('package.json', 'utf8'));
+const archive = resolve(publicCandidate?'artifacts/public-beta':'artifacts/pilot', `${pkg.name}-${pkg.version}.tgz`);
+const digest = createHash('sha256').update(await readFile(archive)).digest('hex');
+assert.equal((await readFile(archive + '.sha256', 'utf8')).split(' ')[0], digest);
+await mkdir('.cache', { recursive: true });
+const work = await mkdtemp(resolve('.cache', 'pilot-isolated-'));
+const prefix = resolve(work, 'installation');
+const allowed = resolve(prefix, 'node_modules/patchwrk-scanner');
+const fixture = resolve(work, 'synthetic repository');
+try {
+  // Empty prefix and empty npm cache: no project dependencies or registry fallback.
+  execFileSync('npm', ['install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', '--package-lock=false', '--no-save', '--prefix', prefix, archive, '--cache', resolve(work, 'empty-npm-cache')], { cwd: work, encoding: 'utf8' });
+  const expected = ['LICENSE', 'README.md', 'THIRD_PARTY_NOTICES.txt', 'dist/data/catalog.v1.json', 'dist/index.js', 'licenses/semver.LICENSE', 'licenses/typescript.LICENSE.txt', 'licenses/typescript.ThirdPartyNoticeText.txt', 'package.json'];
+  if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md');
+  expected.sort();
+  const packed = execFileSync('tar', ['-tzf', archive], { encoding: 'utf8' }).trim().split('\n').map((file) => file.replace(/^package\//, '')).sort();
+  assert.deepEqual(packed, expected);
+  const manifest = JSON.parse(await readFile(resolve(allowed, 'package.json'), 'utf8'));
+  assert.equal(manifest.private, true);
+  for (const field of ['dependencies', 'devDependencies', 'scripts', 'repository', 'bugs', 'homepage']) assert.ok(!Object.hasOwn(manifest, field));
+  const guard = resolve(work, 'deny-network-and-parent-modules.mjs');
+  await writeFile(guard, `
+import { registerHooks, syncBuiltinESMExports } from 'node:module';
+import net from 'node:net'; import http from 'node:http'; import https from 'node:https';
+import http2 from 'node:http2'; import dns from 'node:dns'; import dgram from 'node:dgram';
+let attempts = 0;
+const deny = () => { attempts++; throw new Error('Network disabled during pilot verification'); };
+net.Socket.prototype.connect = deny; http.request = deny; http.get = deny;
+https.request = deny; https.get = deny; http2.connect = deny; dgram.createSocket = deny;
+dns.lookup = deny; dns.resolve = deny; dns.promises.lookup = deny; dns.promises.resolve = deny;
+globalThis.fetch = deny; syncBuiltinESMExports();
+process.on('exit', () => { if (attempts) process.exitCode = 97; });
+const allowed = ${JSON.stringify(pathToFileURL(allowed + '/').href)};
+registerHooks({ resolve(specifier, context, nextResolve) {
+ const result = nextResolve(specifier, context);
+ if (!result.url.startsWith('node:') && !result.url.startsWith(allowed)) throw new Error('Module outside isolated installation');
+ return result;
+} });
+`);
+  const settings = { cwd: work, encoding: 'utf8', env: { ...process.env, NODE_OPTIONS: '', NODE_PATH: '' } };
+  const args = ['--import', guard];
+  const blockedNetwork = spawnSync(process.execPath, [...args, '--input-type=module', '-e', "import net from 'node:net';try { net.connect(1,'127.0.0.1'); } catch {}"], settings);
+  assert.equal(blockedNetwork.status, 97, 'Network guard is ineffective');
+  const blockedParent = spawnSync(process.execPath, [...args, '--input-type=module', '-e', "await import('typescript')"], settings);
+  assert.notEqual(blockedParent.status, 0);
+  assert.match(blockedParent.stderr, /Module outside isolated installation/);
+  const cli = resolve(allowed, 'dist/index.js');
+  const run = (arguments_) => execFileSync(process.execPath, [...args, cli, ...arguments_], settings);
+  assert.match(run(['--help']), /PatchWRK Scanner/);
+  // Exercise npm's executable link too, rather than only invoking the JS file.
+  assert.match(execFileSync(resolve(prefix, 'node_modules/.bin/patchwrk'), ['--help'], { ...settings, env: { ...settings.env, NODE_OPTIONS: `--import=${pathToFileURL(guard).href}` } }), /PatchWRK Scanner/);
+  await mkdir(fixture);
+  const manifestText = JSON.stringify({ dependencies: { openai: '4.0.0', stripe: '8.0.0' } });
+  const source = "import OpenAI from 'openai';import Stripe from 'stripe';const c=new OpenAI();const s=new Stripe(process.env.KEY);c.completions.create({model:'text-davinci-003'});throw new Error('Synthetic target must never execute');";
+  await writeFile(resolve(fixture, 'package.json'), manifestText);
+  await writeFile(resolve(fixture, 'index.ts'), source);
+  await writeFile(resolve(fixture, '.env'), 'SYNTHETIC_PRIVATE_SENTINEL=true');
+  assert.match(run(['scan', fixture]), /openai/);
+  const json = run(['scan', fixture, '--json']);
+  const report = JSON.parse(json);
+  assert.deepEqual(report.integrations.map((item) => item.provider), ['openai', 'stripe']);
+  assert.equal(report.compatibility.assessments.find((item) => item.changeId === 'openai.text-davinci-003.retirement').status, 'affected');
+  assert.ok(!json.includes('SYNTHETIC_PRIVATE_SENTINEL'));
+  assert.equal(await readFile(resolve(fixture, 'index.ts'), 'utf8'), source);
+  assert.equal(await readFile(resolve(fixture, 'package.json'), 'utf8'), manifestText);
+  const changes = JSON.parse(run(['changes', '--coverage', '--json']));
+  assert.equal(changes.catalogCoverage.recordCount, 4);
+  assert.equal(changes.catalogCoverage.liveMonitoring, false);
+  const invalid = spawnSync(process.execPath, [...args, cli, 'scan', '../outside', '--json'], settings);
+  assert.equal(invalid.status, 1);
+  console.log(JSON.stringify({ archive, sha256: digest, installation: 'passed: empty prefix/cache, offline, scripts disabled', runtime: 'self-contained; parent dependencies blocked', network: 'common Node transports denied; help/terminal/JSON/catalog passed', executable: 'passed', targetUnchanged: true, ignoredEnv: true, traversalRejected: true, files: expected, node: process.version }, null, 2));
+} finally { await rm(work, { recursive: true, force: true }); }
+assert.equal(root, process.cwd());

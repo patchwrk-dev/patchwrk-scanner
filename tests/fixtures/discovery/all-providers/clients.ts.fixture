@@ -1,0 +1,11 @@
+import Stripe from 'stripe';
+import { OpenAI as AI } from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
+import { shopifyApi as createShopify } from '@shopify/shopify-api';
+import twilio from 'twilio';
+
+new Stripe(process.env.STRIPE_API_KEY);
+new AI();
+new Anthropic();
+createShopify({});
+twilio();

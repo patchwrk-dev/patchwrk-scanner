@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1",
+  "changes": [
+    {
+      "provider": "stripe",
+      "id": "example.compatibility.stripe",
+      "title": "SYNTHETIC COMPATIBILITY EXAMPLE ONLY: stripe",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [
+        {
+          "packageName": "stripe",
+          "versionRange": ">=1.0.0 <2.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/stripe",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/stripe",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "Synthetic constraints for tests only; not a real provider announcement or verified compatibility claim."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    },
+    {
+      "provider": "openai",
+      "id": "example.compatibility.openai",
+      "title": "SYNTHETIC COMPATIBILITY EXAMPLE ONLY: openai",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [
+        {
+          "packageName": "openai",
+          "versionRange": "^4.0.0"
+        }
+      ],
+      "affectedApiVersions": [
+        {
+          "scheme": "opaque",
+          "versions": [
+            "v1"
+          ],
+          "versionRange": null
+        }
+      ],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/openai",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/openai",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "Synthetic constraints for tests only; not a real provider announcement or verified compatibility claim."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    },
+    {
+      "provider": "shopify",
+      "id": "example.compatibility.shopify",
+      "title": "SYNTHETIC COMPATIBILITY EXAMPLE ONLY: shopify",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [],
+      "affectedApiVersions": [
+        {
+          "scheme": "opaque",
+          "versions": [
+            "2024-07"
+          ],
+          "versionRange": null
+        }
+      ],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/shopify",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/shopify",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "Synthetic constraints for tests only; not a real provider announcement or verified compatibility claim."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+// SYNTHETIC REPOSITORY EXAMPLE ONLY. No real credentials or runtime claims.
+import Stripe from 'stripe';
+import OpenAI from 'openai';
+const stripe = new Stripe(process.env.STRIPE_KEY, { apiVersion: '2024-06-20' });
+stripe.customers.create({}, { apiVersion: '2024-09-30.acacia' });
+const openai = new OpenAI({ apiKey: process.env.OPENAI_KEY });
+openai.completions.create({ model: 'text-davinci-003' });

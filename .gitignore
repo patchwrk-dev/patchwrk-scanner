@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.cache/
+artifacts/
+.scanner-test-*/
+*.log
+*.tgz
+.env
+.env.*
+*.key
+*.pem

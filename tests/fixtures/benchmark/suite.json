@@ -1,0 +1,244 @@
+{
+  "schemaVersion": 1,
+  "provenance": "Synthetic examples authored locally; labels manually specified from source, not scanner output. Not external repositories.",
+  "cases": [
+    {
+      "id": "stripe-commonjs-legacy-option",
+      "description": "Synthetic manually labeled stripe-commonjs-legacy-option",
+      "files": {
+        "package.json": "{\"dependencies\": {\"stripe\": \"8.0.0\"}}",
+        "index.cjs": "const Stripe=require('stripe'); const s=new Stripe(process.env.KEY); s.customers.create({}, {stripeVersion:'2019-11-03'});",
+        "package-lock.json": "{\"lockfileVersion\": 3, \"packages\": {\"\": {\"dependencies\": {\"stripe\": \"8.0.0\"}}, \"node_modules/stripe\": {\"version\": \"8.0.0\"}}}"
+      },
+      "labels": {
+        "providers": [
+          "stripe"
+        ],
+        "reportedProviders": [
+          "stripe"
+        ],
+        "statuses": {
+          "stripe": "affected"
+        },
+        "supported": true
+      }
+    },
+    {
+      "id": "openai-typescript-retired-model",
+      "description": "Synthetic manually labeled openai-typescript-retired-model",
+      "files": {
+        "package.json": "{\"dependencies\": {\"openai\": \"4.0.0\"}}",
+        "index.ts": "import OpenAI from 'openai'; const c=new OpenAI(); c.completions.create({model:'text-davinci-003'});"
+      },
+      "labels": {
+        "providers": [
+          "openai"
+        ],
+        "reportedProviders": [
+          "openai"
+        ],
+        "statuses": {
+          "openai": "affected"
+        },
+        "supported": true
+      }
+    },
+    {
+      "id": "openai-javascript-other-model",
+      "description": "Synthetic manually labeled openai-javascript-other-model",
+      "files": {
+        "package.json": "{\"dependencies\": {\"openai\": \"4.0.0\"}}",
+        "index.js": "import OpenAI from 'openai'; const c=new OpenAI(); c.chat.completions.create({model:'gpt-4o'});"
+      },
+      "labels": {
+        "providers": [
+          "openai"
+        ],
+        "reportedProviders": [
+          "openai"
+        ],
+        "statuses": {
+          "openai": "not-affected-by-this-change"
+        },
+        "supported": true
+      }
+    },
+    {
+      "id": "multiple-sdks",
+      "description": "Synthetic manually labeled multiple-sdks",
+      "files": {
+        "package.json": "{\"dependencies\": {\"stripe\": \"8.0.0\", \"openai\": \"4.0.0\", \"@anthropic-ai/sdk\": \"1.0.0\", \"@shopify/shopify-api\": \"1.0.0\", \"twilio\": \"5.0.0\"}}",
+        "index.ts": "import Stripe from 'stripe'; import OpenAI from 'openai'; import Anthropic from '@anthropic-ai/sdk'; import {shopifyApi} from '@shopify/shopify-api'; import twilio from 'twilio'; const stripe=new Stripe(process.env.KEY); const o=new OpenAI(); const a=new Anthropic(); const s=shopifyApi({}); const t=twilio();"
+      },
+      "labels": {
+        "providers": [
+          "anthropic",
+          "openai",
+          "shopify",
+          "stripe",
+          "twilio"
+        ],
+        "reportedProviders": [
+          "anthropic",
+          "openai",
+          "shopify",
+          "stripe",
+          "twilio"
+        ],
+        "statuses": {},
+        "supported": true
+      }
+    },
+    {
+      "id": "nested-packages",
+      "description": "Synthetic manually labeled nested-packages",
+      "files": {
+        "package.json": "{\"dependencies\": {}}",
+        "packages/a/package.json": "{\"dependencies\": {\"openai\": \"4.0.0\"}}",
+        "packages/a/client.ts": "import OpenAI from 'openai'; export const c=new OpenAI();",
+        "packages/a/use.ts": "import {c} from './client'; c.completions.create({model:'text-davinci-003'});",
+        "packages/b/package.json": "{\"dependencies\": {\"stripe\": \"8.0.0\"}}",
+        "packages/b/index.js": "const Stripe=require('stripe');const s=new Stripe(process.env.KEY);"
+      },
+      "labels": {
+        "providers": [
+          "openai",
+          "stripe"
+        ],
+        "reportedProviders": [
+          "openai",
+          "stripe"
+        ],
+        "statuses": {},
+        "supported": true
+      }
+    },
+    {
+      "id": "json-workspace-monorepo",
+      "description": "Synthetic manually labeled json-workspace-monorepo",
+      "files": {
+        "package.json": "{\"dependencies\": {\"openai\": \"4.0.0\"}, \"workspaces\": [\"packages/*\"]}",
+        "packages/api/package.json": "{\"name\": \"@example/api\", \"exports\": \"./client.ts\"}",
+        "packages/api/client.ts": "import OpenAI from 'openai'; export default new OpenAI();",
+        "packages/app/package.json": "{\"dependencies\": {\"@example/api\": \"workspace:*\"}}",
+        "packages/app/index.ts": "import c from '@example/api'; c.completions.create({model:'text-davinci-003'});"
+      },
+      "labels": {
+        "providers": [
+          "openai"
+        ],
+        "reportedProviders": [
+          "openai"
+        ],
+        "statuses": {
+          "openai": "affected"
+        },
+        "supported": true
+      }
+    },
+    {
+      "id": "alias-and-reexport",
+      "description": "Synthetic manually labeled alias-and-reexport",
+      "files": {
+        "package.json": "{\"dependencies\": {\"openai\": \"4.0.0\"}}",
+        "client.ts": "import SDK from 'openai'; export const original=new SDK();",
+        "barrel.ts": "export {original as api} from './client.js';",
+        "use.ts": "import {api as c} from './barrel.js'; c.completions.create({model:'gpt-4o'});"
+      },
+      "labels": {
+        "providers": [
+          "openai"
+        ],
+        "reportedProviders": [
+          "openai"
+        ],
+        "statuses": {
+          "openai": "not-affected-by-this-change"
+        },
+        "supported": true
+      }
+    },
+    {
+      "id": "scoped-subpath-identity",
+      "description": "Synthetic manually labeled scoped-subpath-identity",
+      "files": {
+        "index.ts": "import Anthropic from '@anthropic-ai/sdk/resources';"
+      },
+      "labels": {
+        "providers": [
+          "anthropic"
+        ],
+        "reportedProviders": [
+          "anthropic"
+        ],
+        "statuses": {},
+        "supported": true
+      }
+    },
+    {
+      "id": "unsupported-dynamic-import",
+      "description": "Synthetic manually labeled unsupported-dynamic-import",
+      "files": {
+        "index.js": "const packageName='openai'; const SDK=await import(packageName); const c=new SDK.default();"
+      },
+      "labels": {
+        "providers": [
+          "openai"
+        ],
+        "reportedProviders": [],
+        "statuses": {},
+        "supported": false
+      }
+    },
+    {
+      "id": "unsupported-wrapper",
+      "description": "Synthetic manually labeled unsupported-wrapper",
+      "files": {
+        "index.ts": "import OpenAI from 'openai'; const c=new OpenAI(); function wrapper(client:any){return client}; wrapper(c).completions.create({model:'text-davinci-003'});"
+      },
+      "labels": {
+        "providers": [
+          "openai"
+        ],
+        "reportedProviders": [
+          "openai"
+        ],
+        "statuses": {
+          "openai": "unknown"
+        },
+        "supported": false
+      }
+    },
+    {
+      "id": "malformed-source",
+      "description": "Synthetic manually labeled malformed-source",
+      "files": {
+        "index.ts": "import OpenAI from 'openai'; const = new OpenAI("
+      },
+      "labels": {
+        "providers": [
+          "openai"
+        ],
+        "reportedProviders": [],
+        "statuses": {},
+        "supported": false
+      }
+    },
+    {
+      "id": "unrelated-and-ignored",
+      "description": "Synthetic manually labeled unrelated-and-ignored",
+      "files": {
+        "index.ts": "const provider='stripe'; const model='text-davinci-003';",
+        "dist/index.js": "import OpenAI from 'openai';",
+        ".env": "SYNTHETIC_EXAMPLE_ONLY=true",
+        "credentials.ts": "import Stripe from 'stripe';"
+      },
+      "labels": {
+        "providers": [],
+        "reportedProviders": [],
+        "statuses": {},
+        "supported": true
+      }
+    }
+  ]
+}

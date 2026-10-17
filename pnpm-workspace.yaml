@@ -1,0 +1,8 @@
+packages:
+  - '.'
+allowBuilds:
+  esbuild: true
+
+# GHSA-g7r4-m6w7-qqqr: patched build/test tooling; tsup cross-minor override tested locally.
+overrides:
+  esbuild: 0.28.1

@@ -1,0 +1,55 @@
+{
+  "name": "patchwrk-scanner",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Read-only third-party API integration discovery for JavaScript and TypeScript",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "bin": {
+    "patchwrk": "dist/index.js"
+  },
+  "scripts": {
+    "dev": "node --experimental-strip-types src/cli/index.ts",
+    "build": "tsup",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "benchmark": "vitest run tests/benchmark.test.ts --reporter=verbose --disableConsoleIntercept",
+    "package:check": "node scripts/check-package.mjs",
+    "beta:pack": "node scripts/create-pilot-package.mjs --public-candidate",
+    "beta:verify": "node scripts/verify-pilot-package.mjs --public-candidate"
+  },
+  "dependencies": {
+    "semver": "^7.8.5",
+    "typescript": "^5.9.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "@types/semver": "^7.7.0",
+    "eslint": "^10.12.0",
+    "tsup": "^8.5.0",
+    "typescript-eslint": "^8.46.0",
+    "vitest": "^4.0.0"
+  },
+  "files": [
+    "dist/index.js",
+    "dist/data/catalog.v1.json",
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
+  ],
+  "keywords": [
+    "api",
+    "scanner",
+    "typescript",
+    "compatibility",
+    "offline"
+  ],
+  "author": "Jovan Simon"
+}

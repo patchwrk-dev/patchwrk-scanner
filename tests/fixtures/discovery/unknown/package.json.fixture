@@ -1,0 +1,5 @@
+{
+  "dependencies": { "stripe": "*", "openai": 42 },
+  "optionalDependencies": { "twilio": "git+https://user:private-token@example.invalid/repository" },
+  "peerDependencies": { "@anthropic-ai/sdk": "workspace:*" }
+}

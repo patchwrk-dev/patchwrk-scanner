@@ -1,0 +1,221 @@
+{
+  "schemaVersion": 1,
+  "catalogVersion": "1",
+  "changes": [
+    {
+      "provider": "stripe",
+      "id": "example.stripe.001",
+      "title": "SYNTHETIC EXAMPLE ONLY: stripe change",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [
+        {
+          "packageName": "stripe",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/stripe",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/stripe",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "EXAMPLE ONLY. Dates, ranges, and classifications in tests are fabricated synthetic inputs, never official claims."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    },
+    {
+      "provider": "openai",
+      "id": "example.openai.001",
+      "title": "SYNTHETIC EXAMPLE ONLY: openai change",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [
+        {
+          "packageName": "openai",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/openai",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/openai",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "EXAMPLE ONLY. Dates, ranges, and classifications in tests are fabricated synthetic inputs, never official claims."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    },
+    {
+      "provider": "anthropic",
+      "id": "example.anthropic.001",
+      "title": "SYNTHETIC EXAMPLE ONLY: anthropic change",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [
+        {
+          "packageName": "@anthropic-ai/sdk",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/anthropic",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/anthropic",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "EXAMPLE ONLY. Dates, ranges, and classifications in tests are fabricated synthetic inputs, never official claims."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    },
+    {
+      "provider": "shopify",
+      "id": "example.shopify.001",
+      "title": "SYNTHETIC EXAMPLE ONLY: shopify change",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [
+        {
+          "packageName": "@shopify/shopify-api",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/shopify",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/shopify",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "EXAMPLE ONLY. Dates, ranges, and classifications in tests are fabricated synthetic inputs, never official claims."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    },
+    {
+      "provider": "twilio",
+      "id": "example.twilio.001",
+      "title": "SYNTHETIC EXAMPLE ONLY: twilio change",
+      "description": "Illustrative test data; this is not a real provider announcement.",
+      "officialSourceUrl": null,
+      "publicationDate": null,
+      "effectiveDate": null,
+      "retirementDate": null,
+      "category": "sdk-update",
+      "affectedSdks": [
+        {
+          "packageName": "twilio",
+          "versionRange": "^1.0.0"
+        }
+      ],
+      "affectedApiVersions": [],
+      "targets": [],
+      "migrationInstructions": null,
+      "evidence": [
+        {
+          "sourceUrl": "https://example.invalid/patchwrk-examples/twilio",
+          "locator": "Synthetic fixture",
+          "excerpt": null
+        }
+      ],
+      "provenance": {
+        "kind": "illustrative",
+        "sources": [
+          {
+            "url": "https://example.invalid/patchwrk-examples/twilio",
+            "retrievedAt": null
+          }
+        ],
+        "notes": "EXAMPLE ONLY. Dates, ranges, and classifications in tests are fabricated synthetic inputs, never official claims."
+      },
+      "verification": {
+        "status": "illustrative",
+        "method": null,
+        "reviewer": null
+      },
+      "lastReviewedAt": null
+    }
+  ]
+}

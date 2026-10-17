@@ -1,0 +1,23 @@
+name: Request provider support
+description: Propose an SDK using official documentation and synthetic evidence.
+body:
+  - type: markdown
+    attributes:
+      value: "No secrets, private source, raw reports or personal paths. Security reports belong at security@patchwrk.dev."
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Official SDK or provider URLs and minimal static pattern
+    validations:
+      required: true
+  - type: input
+    id: context
+    attributes:
+      label: Scanner version, Node and OS if applicable
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Review before public submission
+      options:
+        - label: This is a non-sensitive synthetic or sanitized example I am authorized to share.
+          required: true

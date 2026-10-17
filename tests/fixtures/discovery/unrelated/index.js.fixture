@@ -1,0 +1,5 @@
+// import OpenAI from 'openai';
+const example = "require('stripe')";
+class OpenAI {}
+new OpenAI();
+require('node:fs');
