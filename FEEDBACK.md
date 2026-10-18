@@ -1,8 +1,8 @@
 # Optional developer feedback
 
-Use the prepared issue forms only after the approved repository opens Issues.
-Until then contact support@patchwrk.dev through an existing conversation. No accounts,
-forms, telemetry, messages or participant enrollment are created by this candidate.
+Use the [GitHub issue forms](https://github.com/patchwrk-dev/patchwrk-scanner/issues/new/choose)
+for non-sensitive feedback, or contact support@patchwrk.dev. Feedback is voluntary;
+the scanner has no telemetry, automatic uploads or participant enrollment.
 
 1. Confirm permission to scan the target; start with a stable non-sensitive checkout.
 2. Record scanner version/archive hash, Node/OS, command flags, expected behavior,

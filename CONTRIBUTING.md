@@ -1,7 +1,7 @@
 # Contributing to PatchWRK Scanner
 
-This is a prepared beta candidate. Public repository URL and contribution opening
-require founder approval; no repository has been created by this export.
+This is an experimental public beta. Use the
+[scanner repository](https://github.com/patchwrk-dev/patchwrk-scanner) for contributions.
 
 Use Node 24/pnpm 11.25.0 and a trusted source checkout. Run frozen-lockfile install
 with scripts disabled, then lint, typecheck, test, build, benchmark and package checks.
@@ -9,7 +9,7 @@ Changes must preserve read-only/offline behavior, schema versions, strict runtim
 validation, tenant-independent scanner logic and partial-coverage disclosure.
 Never execute scanned code, install target dependencies or upload source.
 
-Discuss broad work before implementation. After publication, use a fork/branch and
+Discuss broad work before implementation. Use a fork/branch and
 PR explaining the concrete problem, behavior, focused synthetic tests and limits.
 Do not submit build artifacts, secrets, private reports or unrelated project source.
 No change authorizes publishing, deploying, billing or production credential use.

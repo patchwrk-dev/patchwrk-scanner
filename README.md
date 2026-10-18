@@ -1,9 +1,9 @@
-# PatchWRK Scanner — experimental GitHub beta candidate
+# PatchWRK Scanner — experimental GitHub beta
 
 PatchWRK Scanner finds static third-party SDK evidence in JavaScript and TypeScript.
 It is **read-only and offline**: no API keys, telemetry, uploads, provider requests,
 execution of scanned code, dependency installation in targets, repairs or monitoring.
-This is a local release candidate; no public repository or release is announced here.
+The scanner source is public. No GitHub release asset or npm publication is announced here.
 MIT licensed; Node.js **24** required. macOS/Ubuntu tested; Windows security unverified.
 
 ## Install a reviewed offline archive
@@ -28,8 +28,8 @@ approved release version/checksum; do not silently replace delivered archives.
 
 ## Build from reviewed public source
 
-After a separately approved source publication, obtain its exact reviewed commit
-from the maintainer's public repository (name/URL still pending founder approval).
+Obtain an exact reviewed commit from the public
+[PatchWRK Scanner repository](https://github.com/patchwrk-dev/patchwrk-scanner).
 Inside that scanner checkout, use Node 24 and pnpm 11.25.0:
 
 ```sh
@@ -105,13 +105,15 @@ hard bounded by AST limits; use external OS isolation/resource limits when requi
 ## Feedback, support and security
 
 [Feedback guidance](FEEDBACK.md) describes optional sanitized reports; source users
-can use the prepared bug, missing-provider and useful-finding templates once Issues
-are enabled on the approved public repository. Until then use support@patchwrk.dev.
+can use the bug, missing-provider and useful-finding templates in
+[GitHub Issues](https://github.com/patchwrk-dev/patchwrk-scanner/issues/new/choose),
+or contact support@patchwrk.dev.
 Never submit raw private reports/source, credentials or personal paths. There is no
 telemetry or automatic feedback upload. Sharing a report is voluntary and manual.
 
 Use [SECURITY.md](SECURITY.md) for confidential vulnerabilities. GitHub private
-reporting is not assumed enabled. Current v0.x support is best effort: no guaranteed
+vulnerability reporting is enabled; use the confidential reporting link in that
+policy. Current v0.x support is best effort: no guaranteed
 backports, response SLA or remediation dates. See [CONTRIBUTING.md](CONTRIBUTING.md)
 and [PUBLIC_PROVENANCE.md](PUBLIC_PROVENANCE.md). Existing MIT ownership attribution
 is preserved; this source snapshot does not claim to include all private history.
