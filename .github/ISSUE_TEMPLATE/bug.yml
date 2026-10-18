@@ -1,5 +1,5 @@
-name: Scanner bug or false positive
-description: Non-sensitive false positives, misses, version resolution or usability bugs.
+name: Scanner bug or installation problem
+description: Installation, false positives, misses, versions or compatibility assessment.
 body:
   - type: markdown
     attributes:
@@ -7,7 +7,7 @@ body:
   - type: input
     id: version
     attributes:
-      label: Scanner version or archive hash, Node and OS
+      label: Scanner version or commit/archive hash, Node, pnpm and OS
     validations:
       required: true
   - type: dropdown
@@ -15,6 +15,8 @@ body:
     attributes:
       label: Finding type
       options:
+        - Installation problem
+        - Compatibility assessment problem
         - False positive
         - Missed supported pattern
         - Unsupported pattern

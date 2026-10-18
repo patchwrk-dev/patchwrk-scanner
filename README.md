@@ -6,25 +6,17 @@ execution of scanned code, dependency installation in targets, repairs or monito
 The scanner source is public. No GitHub release asset or npm publication is announced here.
 MIT licensed; Node.js **24** required. macOS/Ubuntu tested; Windows security unverified.
 
-## Offline archive (not yet published)
+Use it before reviewing a dependency upgrade or investigating an integration: find
+supported SDK evidence, inspect recorded versions and compare it with a small local
+catalog. Findings guide review; they do not establish production breakage or health.
 
-Use only a maintainer-approved GitHub release asset after publication is separately
-authorized. No release URL exists yet. Do not use `npx patchwrk` or a registry/global
-install: the npm name is unpublished by this project. Verify the archive SHA-256
-against the separately authenticated maintainer value before installing.
+**Detection:** Stripe, OpenAI, Anthropic, Shopify and Twilio SDKs. **Compatibility
+catalog:** four historical Stripe/OpenAI records; no curated changes for the other
+three providers. Detection support does not imply complete API-change coverage.
 
-```sh
-node --version
-# macOS; Linux can use sha256sum instead
-shasum -a 256 patchwrk-scanner-0.1.0.tgz
-npm install --offline --ignore-scripts --no-audit --no-fund --package-lock=false --no-save --prefix ./patchwrk-local ./patchwrk-scanner-0.1.0.tgz
-node ./patchwrk-local/node_modules/patchwrk-scanner/dist/index.js --help
-```
-
-The archive bundles its runtime libraries and license notices. Empty-cache installation
-needs no registry or GitHub access once obtained. A checksum alone does not prove
-publisher identity unless its expected value came from a trusted source. Verify the
-approved release version/checksum; do not silently replace delivered archives.
+[Install from source](#build-from-reviewed-public-source) · [First scan](#first-scan) ·
+[Actual synthetic demo](#reproduce-a-synthetic-finding) · [Feedback](FEEDBACK.md) ·
+[Confidential security reporting](SECURITY.md)
 
 ## Build from reviewed public source
 
@@ -79,6 +71,84 @@ Directory defaults to the working
 directory; `--help` lists bounded scan/module options. Invalid input exits 1. A valid
 report exits 0 **even with partial coverage or an affected finding**; exit status is
 not a compatibility/security gate. Inspect `coverage.complete`, warnings and limits.
+
+## Reproduce a synthetic finding
+
+After the source build, run:
+
+```sh
+node scripts/demo.mjs
+```
+
+This copies the existing `openai-typescript-retired-model` benchmark fixture into
+an isolated `.cache/` directory and scans it without installing its dependencies or
+executing its code. Its synthetic manifest declares `openai: 4.0.0`; `index.ts:1`
+initializes a client and references `text-davinci-003`. No credentials are needed.
+The demo retains local raw reports; review paths before sharing them. The demo
+script is available in source, not in the unpublished offline package.
+
+Actual scanner-generated terminal excerpt (directory and other lines omitted):
+
+```text
+PatchWRK Scanner
+Integrations: 1
+openai (openai)
+  Declared: "4.0.0"; resolved: "unknown" ("package.json", dependencies)
+  "index.ts":1 client-initialization
+  "index.ts":1 esm-import
+Compatibility: 2 assessments (offline catalog 3)
+openai (openai) "openai.gpt-4-0314.retirement": Not affected by this change
+  Evidence level: supported-version-evidence; scope: documented-configuration-applicability
+openai (openai) "openai.text-davinci-003.retirement": Affected
+  Evidence level: supported-version-evidence; scope: documented-configuration-applicability
+```
+
+Actual JSON excerpt (selected assessment fields; not the full report):
+
+```json
+{
+  "assessment": {
+    "changeId": "openai.text-davinci-003.retirement",
+    "status": "affected",
+    "evidenceLevel": "supported-version-evidence",
+    "scope": "documented-configuration-applicability",
+    "unknowns": [
+      "Remote API version is unknown; SDK versions do not establish it.",
+      "Use of documented endpoints, methods, or symbols has not been established."
+    ]
+  }
+}
+```
+
+The provider was detected, but the SDK's installed version remains unknown: a
+manifest declaration is not an installation. `affected` means the observed model
+matches this historical record, not that a running application was tested or found
+broken. The other model record's non-applicability is not a health guarantee. Read
+all coverage warnings, unknowns and limitations in the full report.
+
+Common input errors exit 1 with guidance: a missing directory cannot be accessed;
+`..` traversal is refused (use a direct path); unknown commands suggest `--help`.
+Successful report generation exits 0 even when findings or incomplete coverage exist.
+
+## Offline archive (not yet published)
+
+Use only a maintainer-approved GitHub release asset after publication is separately
+authorized. No release URL exists yet. Do not use `npx patchwrk` or a registry/global
+install: the npm name is unpublished by this project. Verify the archive SHA-256
+against the separately authenticated maintainer value before installing.
+
+```sh
+node --version
+# macOS; Linux can use sha256sum instead
+shasum -a 256 patchwrk-scanner-0.1.0.tgz
+npm install --offline --ignore-scripts --no-audit --no-fund --package-lock=false --no-save --prefix ./patchwrk-local ./patchwrk-scanner-0.1.0.tgz
+node ./patchwrk-local/node_modules/patchwrk-scanner/dist/index.js --help
+```
+
+The archive bundles its runtime libraries and license notices. Empty-cache installation
+needs no registry or GitHub access once obtained. A checksum alone does not prove
+publisher identity unless its expected value came from a trusted source. Verify the
+approved release version/checksum; do not silently replace delivered archives.
 
 ## Supported evidence and limitations
 

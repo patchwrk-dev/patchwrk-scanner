@@ -1,0 +1,26 @@
+name: Request a scanner improvement
+description: Suggest a scoped improvement to offline scanner functionality or usability.
+body:
+  - type: markdown
+    attributes:
+      value: "No secrets, private source, raw reports or personal paths. Use SECURITY.md for confidential vulnerabilities. Use the provider form for new SDK support."
+  - type: textarea
+    id: problem
+    attributes:
+      label: Developer problem and current limitation
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior and minimal synthetic example
+      description: Explain expected output and uncertainty; do not imply runtime monitoring or repair exists.
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Review before public submission
+      options:
+        - label: I am authorized to share this example and removed confidential information.
+          required: true
