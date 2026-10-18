@@ -6,7 +6,7 @@ execution of scanned code, dependency installation in targets, repairs or monito
 The scanner source is public. No GitHub release asset or npm publication is announced here.
 MIT licensed; Node.js **24** required. macOS/Ubuntu tested; Windows security unverified.
 
-## Install a reviewed offline archive
+## Offline archive (not yet published)
 
 Use only a maintainer-approved GitHub release asset after publication is separately
 authorized. No release URL exists yet. Do not use `npx patchwrk` or a registry/global
@@ -30,7 +30,19 @@ approved release version/checksum; do not silently replace delivered archives.
 
 Obtain an exact reviewed commit from the public
 [PatchWRK Scanner repository](https://github.com/patchwrk-dev/patchwrk-scanner).
-Inside that scanner checkout, use Node 24 and pnpm 11.25.0:
+Install Git, Node.js **24** and pnpm **11.25.0** first; verify `node --version`
+and `pnpm --version`. If either is missing, use the official
+[Node.js download instructions](https://nodejs.org/en/download) and
+[pnpm installation instructions](https://pnpm.io/installation), selecting those versions.
+The commands below assume a POSIX shell on macOS or Linux.
+
+```sh
+git clone https://github.com/patchwrk-dev/patchwrk-scanner.git
+cd patchwrk-scanner
+git rev-parse HEAD
+```
+
+Review the selected commit before installing. Inside that checkout:
 
 ```sh
 pnpm install --frozen-lockfile --ignore-scripts
@@ -54,12 +66,16 @@ actively changing hostile tree. No target build, install, configuration or scrip
 need to run.
 
 ```sh
-node ./patchwrk-local/node_modules/patchwrk-scanner/dist/index.js scan /absolute/path/to/authorized-checkout
-node ./patchwrk-local/node_modules/patchwrk-scanner/dist/index.js scan /absolute/path/to/authorized-checkout --json
-node ./patchwrk-local/node_modules/patchwrk-scanner/dist/index.js changes --coverage
+node dist/index.js scan /absolute/path/to/authorized-checkout
+node dist/index.js scan /absolute/path/to/authorized-checkout --json
+node dist/index.js changes --coverage
 ```
 
-For source builds, substitute `node dist/index.js`. Directory defaults to the working
+These examples use the source build above. Once an approved offline archive is
+available, substitute `node ./patchwrk-local/node_modules/patchwrk-scanner/dist/index.js`
+from its installation directory. Replace the example path with your authorized
+checkout; do not install dependencies or run scripts in that scan target.
+Directory defaults to the working
 directory; `--help` lists bounded scan/module options. Invalid input exits 1. A valid
 report exits 0 **even with partial coverage or an affected finding**; exit status is
 not a compatibility/security gate. Inspect `coverage.complete`, warnings and limits.

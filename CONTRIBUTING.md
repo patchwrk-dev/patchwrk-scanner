@@ -29,3 +29,11 @@ Use [FEEDBACK.md](FEEDBACK.md) and prepared issue forms for non-sensitive report
 use [SECURITY.md](SECURITY.md) for vulnerabilities. Preserve MIT ownership and third-party
 notices. Contributions follow existing license terms; no CLA or legal agreement is
 invented here. Support is best effort with no guaranteed response or backports.
+
+CI verifies Ubuntu 24.04 and `macos-latest` with Node 24. Ubuntu is pinned to avoid
+an unreviewed OS change when `ubuntu-latest` migrates. The Linux check deliberately
+keeps the name `verify (ubuntu-latest)` so existing required checks remain valid;
+its actual runner is `ubuntu-24.04`. Keep those check names stable unless repository
+owners separately coordinate a ruleset update. Actions are pinned to reviewed full
+commit SHAs with Node 24 runtimes; preserve read-only workflow permissions and
+`persist-credentials: false`.
