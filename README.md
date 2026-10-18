@@ -190,6 +190,10 @@ hard bounded by AST limits; use external OS isolation/resource limits when requi
 
 ## Feedback, support and security
 
+Preparing to test the beta? Read the
+[developer testing guide](https://github.com/patchwrk-dev/patchwrk-scanner/blob/main/BETA_TESTING.md)
+for synthetic scenarios, optional feedback and participation boundaries.
+
 [Feedback guidance](FEEDBACK.md) describes optional sanitized reports; source users
 can use the bug, missing-provider and useful-finding templates in
 [GitHub Issues](https://github.com/patchwrk-dev/patchwrk-scanner/issues/new/choose),
