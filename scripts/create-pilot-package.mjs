@@ -14,6 +14,7 @@ assert.ok(process.argv.length===2||(process.argv.length===3&&publicCandidate),'U
 const publicTemplates=existsSync('PUBLIC_PROVENANCE.md')?'.':'packaging/public-beta';
 const root = process.cwd();
 const pkg = JSON.parse(await readFile('package.json', 'utf8'));
+const { reportDefines } = await import('../tsup.config.ts');
 assert.equal(pkg.private, true);
 assert.match(pkg.version, /^\d+\.\d+\.\d+$/);
 const cache = resolve('.cache');
@@ -27,7 +28,7 @@ const expected = [
   'dist/index.js', 'licenses/semver.LICENSE', 'licenses/typescript.LICENSE.txt',
   'licenses/typescript.ThirdPartyNoticeText.txt', 'package.json',
 ] ;
-if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md');
+if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md','docs/SCANNER_REPORTS.md');
 expected.sort();
 try {
   await mkdir(resolve(staging, 'licenses'));
@@ -35,6 +36,7 @@ try {
     entry: ['src/cli/index.ts'], outDir: resolve(staging, 'dist'),
     format: ['esm'], platform: 'node', target: 'node24', clean: true,
     sourcemap: false, noExternal: ['typescript', 'semver'], config: false,
+    define: reportDefines(),
     banner: { js: "import { createRequire as __patchwrkCreateRequire } from 'node:module'; const require = __patchwrkCreateRequire(import.meta.url); const __filename = import.meta.filename; const __dirname = import.meta.dirname;" },
     esbuildOptions(options) {
       options.metafile = true;
@@ -63,6 +65,10 @@ try {
   await copyFile('LICENSE', resolve(staging, 'LICENSE'));
   await copyFile(publicCandidate?resolve(publicTemplates,'README.md'):'packaging/pilot/README.md', resolve(staging, 'README.md'));
   if(publicCandidate)for(const file of ['SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md'])await copyFile(resolve(publicTemplates,file),resolve(staging,file));
+  if(publicCandidate) {
+    await mkdir(resolve(staging, 'docs'));
+    await copyFile(publicTemplates === '.' ? 'docs/SCANNER_REPORTS.md' : resolve(publicTemplates, 'SCANNER_REPORTS.md'), resolve(staging, 'docs/SCANNER_REPORTS.md'));
+  }
   const notices = ['Bundled runtime dependencies (not registry dependencies):'];
   for (const [name, files] of [['typescript', ['LICENSE.txt', 'ThirdPartyNoticeText.txt']], ['semver', ['LICENSE']]]) {
     const base = dirname(require.resolve(name + '/package.json'));

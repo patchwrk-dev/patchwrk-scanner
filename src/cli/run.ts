@@ -5,6 +5,10 @@ import { listChanges } from '../changes/index.ts';
 import { formatChangesJson, formatChangesTerminal } from '../reports/changes.ts';
 import type { ChangeCatalogRepository } from '../types/changes.ts';
 import type { ModuleLimits } from '../types/analysis.ts';
+import { captureReportContext } from '../reports/context.ts';
+import { buildReportView } from '../reports/view.ts';
+import { formatHtml } from '../reports/html.ts';
+import { writeNewArtifact } from '../artifacts/filesystem.ts';
 
 export const help = `PatchWRK Scanner
 
@@ -19,6 +23,7 @@ Commands:
 Options:
   --help, -h Show this help
   --json     Print a JSON report
+  --html PATH  Save a new self-contained local HTML report (never overwrite)
   --provider NAME    Filter changes by provider
   --max-files N       Maximum files read (default: 2000)
   --max-file-bytes N  Maximum bytes per file (default: 1048576)
@@ -78,6 +83,7 @@ export async function runCli(args: string[], output: CliOutput, services: { cata
     let directory: string | undefined;
     let json = false;
     let positionalOnly = false;
+    let htmlPath: string | undefined;
     const limits: Partial<ScanLimits> = {};
     const analysisLimits: Partial<ModuleLimits> = {};
     const moduleOptions: Record<string, keyof ModuleLimits> = {
@@ -93,6 +99,12 @@ export async function runCli(args: string[], output: CliOutput, services: { cata
       const arg = args[index]!;
       if (!positionalOnly && arg === '--') positionalOnly = true;
       else if (!positionalOnly && arg === '--json') json = true;
+      else if (!positionalOnly && arg === '--html') {
+        if (htmlPath !== undefined) throw new Error('Duplicate --html option.');
+        const value = args[++index];
+        if (!value || value.startsWith('-')) throw new Error('Expected a new .html path after --html.');
+        htmlPath = value;
+      }
       else if (!positionalOnly && arg === '--api-version') {
         const value = args[++index];
         if (!value || value.startsWith('-')) throw new Error('Expected provider=version after --api-version.');
@@ -116,7 +128,11 @@ export async function runCli(args: string[], output: CliOutput, services: { cata
       else if (directory !== undefined) throw new Error('Only one directory may be scanned.');
       else directory = arg;
     }
-    const report = await scanWithCompatibility(directory ?? process.cwd(), { scan: { limits, analysisLimits }, apiVersionInputs, ...services });
+    const options = { scan: { limits, analysisLimits }, apiVersionInputs, ...services };
+    const target = directory ?? process.cwd();
+    const context = htmlPath === undefined ? undefined : await captureReportContext(target, options);
+    const report = context?.scan ?? await scanWithCompatibility(target, options);
+    if (context && htmlPath !== undefined) await writeNewArtifact(htmlPath, formatHtml(buildReportView(report, context.metadata)));
     output.stdout(json ? formatJson(report) : formatTerminal(report));
     return 0;
   } catch (error) {

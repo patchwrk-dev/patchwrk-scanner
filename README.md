@@ -15,7 +15,7 @@ catalog:** four historical Stripe/OpenAI records; no curated changes for the oth
 three providers. Detection support does not imply complete API-change coverage.
 
 [Install from source](#build-from-reviewed-public-source) · [First scan](#first-scan) ·
-[Actual synthetic demo](#reproduce-a-synthetic-finding) · [Feedback](FEEDBACK.md) ·
+[Actual synthetic demo](#reproduce-a-synthetic-finding) · [HTML reports](#visual-html-reports) · [Feedback](FEEDBACK.md) ·
 [Confidential security reporting](SECURITY.md)
 
 ## Build from reviewed public source
@@ -71,6 +71,31 @@ Directory defaults to the working
 directory; `--help` lists bounded scan/module options. Invalid input exits 1. A valid
 report exits 0 **even with partial coverage or an affected finding**; exit status is
 not a compatibility/security gate. Inspect `coverage.complete`, warnings and limits.
+
+## Visual HTML reports
+
+Generate a self-contained local dashboard alongside the existing terminal or JSON report:
+
+```sh
+node dist/index.js scan ./my-project --html ./report.html
+node dist/index.js scan ./my-project --json --html ./report-json.html
+```
+
+Choose a **new `.html` file in an existing stable, non-symlink directory**. Existing
+files are never overwritten, and no browser opens automatically. In Chrome, use
+File → Open File to view the report. No server, account or network connection is needed.
+
+The dashboard prioritizes existing findings, source references, uncertainty and
+manual next steps. Expand technical details for full assessment evidence, coverage,
+provenance and fingerprints. Attention counts Affected + Potential risk; Unknown is
+shown separately and still requires review. Affected is historical applicability,
+not proven runtime failure; no known finding is not a compatibility guarantee.
+HTML omits absolute target/output paths, raw arguments and source snippets; review
+remaining root-relative labels and metadata privately before sharing.
+
+See [the report guide](docs/SCANNER_REPORTS.md) for status meanings, privacy, CSP,
+output errors and residual filesystem/interrupted-write limits. Terminal/JSON output
+and detection stay unchanged. No history, comparison, monitoring or repair is added.
 
 ## Reproduce a synthetic finding
 

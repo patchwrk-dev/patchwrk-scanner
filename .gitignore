@@ -2,6 +2,8 @@ node_modules/
 dist/
 .cache/
 artifacts/
+# Scanner artifact writer is source, not generated report output.
+!/src/artifacts/
 .scanner-test-*/
 *.log
 *.tgz
