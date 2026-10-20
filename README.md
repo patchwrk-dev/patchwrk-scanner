@@ -207,3 +207,24 @@ policy. Current v0.x support is best effort: no guaranteed
 backports, response SLA or remediation dates. See [CONTRIBUTING.md](CONTRIBUTING.md)
 and [PUBLIC_PROVENANCE.md](PUBLIC_PROVENANCE.md). Existing MIT ownership attribution
 is preserved; this source snapshot does not claim to include all private history.
+
+## Future vision: PatchWRK Cloud (planned)
+
+**PatchWRK — The AI maintenance engineer for APIs.**
+
+**Your APIs change. Your code stays ready.**
+
+PatchWRK Cloud is planned around third-party API compatibility and maintenance:
+API Discovery, API Change Intelligence, Code Impact Analysis, AI Repair,
+Automated Verification, and GitHub Pull Requests. **Impact Intelligence** is the
+intended differentiator: connecting reviewed API changes to code evidence and
+explaining applicability, impact and uncertainty.
+
+**Cloud is not available today.** Future API migration fixes would require isolated
+verification and human review. No release dates or autonomous repair outcomes are
+promised.
+
+The available Scanner remains an offline, read-only experimental beta. It does not
+continuously monitor services, generate repairs, execute scanned code or open pull
+requests. Its supported patterns, limited catalog, uncertainty and security boundaries
+above remain unchanged.
