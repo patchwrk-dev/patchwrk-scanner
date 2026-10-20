@@ -95,6 +95,21 @@ registerHooks({ resolve(specifier, context, nextResolve) {
   const saved = JSON.parse(run(['history', 'list', '--directory', history, '--json', '--html', resolve(work, 'history-list.html')]));
   assert.equal(saved.records.length, 2);
   const first = saved.records[0].scanId;
+  const beforeBytes = await readFile(resolve(history, `${saved.records[1].scanId}.json`));
+  const afterBytes = await readFile(resolve(history, `${first}.json`));
+  const compareArgs = ['history', 'compare', saved.records[1].scanId, first, '--directory', history, '--json', '--html', resolve(work, 'comparison.html')];
+  const comparison = JSON.parse(run(compareArgs));
+  assert.equal(comparison.schemaVersion, 1);
+  assert.ok(comparison.assessments.every((item) => item.category === 'unchanged'));
+  assert.ok(!JSON.stringify(comparison).includes(fixture));
+  const comparisonHtml = await readFile(resolve(work, 'comparison.html'), 'utf8');
+  assert.match(comparisonHtml, /Scan Comparison/);
+  assert.ok(!/<(?:script|img|iframe|form|link)\b/i.test(comparisonHtml));
+  assert.equal(spawnSync(process.execPath, [...args, cli, ...compareArgs], settings).status, 1);
+  assert.equal(await readFile(resolve(work, 'comparison.html'), 'utf8'), comparisonHtml);
+  assert.deepEqual(await readFile(resolve(history, `${saved.records[1].scanId}.json`)), beforeBytes);
+  assert.deepEqual(await readFile(resolve(history, `${first}.json`)), afterBytes);
+
   const reopened = JSON.parse(run(['history', 'show', first, '--directory', history, '--json', '--html', resolve(work, 'historical.html')]));
   assert.ok(!JSON.stringify(reopened).includes(fixture));
   assert.ok(!JSON.stringify(reopened).includes('SYNTHETIC_PRIVATE_SENTINEL'));
@@ -110,6 +125,6 @@ registerHooks({ resolve(specifier, context, nextResolve) {
   assert.equal(changes.catalogCoverage.liveMonitoring, false);
   const invalid = spawnSync(process.execPath, [...args, cli, 'scan', '../outside', '--json'], settings);
   assert.equal(invalid.status, 1);
-  console.log(JSON.stringify({ archive, sha256: digest, installation: 'passed: empty prefix/cache, offline, scripts disabled', runtime: 'self-contained; parent dependencies blocked', network: 'common Node transports denied; help/terminal/JSON/HTML/catalog/history passed', html: 'privacy/CSP/JSON compatibility/no-overwrite passed', history: 'init/two saves/list/reopen/delete preview/apply/prune preview passed', executable: 'passed', targetUnchanged: true, ignoredEnv: true, traversalRejected: true, files: expected, node: process.version }, null, 2));
+  console.log(JSON.stringify({ archive, sha256: digest, installation: 'passed: empty prefix/cache, offline, scripts disabled', runtime: 'self-contained; parent dependencies blocked', network: 'common Node transports denied; help/terminal/JSON/HTML/catalog/history passed', html: 'privacy/CSP/JSON compatibility/no-overwrite passed', history: 'init/two saves/list/reopen/compare with immutable inputs and no-overwrite/delete preview/apply/prune preview passed', executable: 'passed', targetUnchanged: true, ignoredEnv: true, traversalRejected: true, files: expected, node: process.version }, null, 2));
 } finally { await rm(work, { recursive: true, force: true }); }
 assert.equal(root, process.cwd());

@@ -272,3 +272,18 @@ Deletion/pruning preview by default and require `--apply` to unlink records. No
 automatic history, browser opening, rescanning, deletion, telemetry or Cloud sync.
 [The history guide](docs/SCANNER_HISTORY.md) documents storage, bounds, strict parsing,
 privacy, original evidence, age/keep-last selection and filesystem/interruption risks.
+
+### Local comparison — unpublished Phase C candidate
+
+On this development branch, compare two explicitly saved local scan IDs without
+rescanning or modifying records:
+
+```sh
+node dist/index.js history compare BEFORE_UUID AFTER_UUID --directory ./my-history --html ./new-comparison.html
+```
+
+Terminal and `--json` comparison are also available. Source movement, incomplete
+coverage and Scanner/catalog differences remain explicit uncertainties. Disappearing
+findings do not prove a fix; source changes are manual or external. See the
+[matching and safety guide](docs/SCANNER_HISTORY.md#local-comparison--unpublished-phase-c-candidate).
+Phase C is a local review candidate, not advertised as merged or released.
