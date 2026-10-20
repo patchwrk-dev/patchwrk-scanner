@@ -28,7 +28,7 @@ const expected = [
   'dist/index.js', 'licenses/semver.LICENSE', 'licenses/typescript.LICENSE.txt',
   'licenses/typescript.ThirdPartyNoticeText.txt', 'package.json',
 ] ;
-if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md','docs/SCANNER_REPORTS.md');
+if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md','docs/SCANNER_REPORTS.md','docs/SCANNER_HISTORY.md');
 expected.sort();
 try {
   await mkdir(resolve(staging, 'licenses'));
@@ -68,6 +68,7 @@ try {
   if(publicCandidate) {
     await mkdir(resolve(staging, 'docs'));
     await copyFile(publicTemplates === '.' ? 'docs/SCANNER_REPORTS.md' : resolve(publicTemplates, 'SCANNER_REPORTS.md'), resolve(staging, 'docs/SCANNER_REPORTS.md'));
+    await copyFile(publicTemplates === '.' ? 'docs/SCANNER_HISTORY.md' : resolve(publicTemplates, 'SCANNER_HISTORY.md'), resolve(staging, 'docs/SCANNER_HISTORY.md'));
   }
   const notices = ['Bundled runtime dependencies (not registry dependencies):'];
   for (const [name, files] of [['typescript', ['LICENSE.txt', 'ThirdPartyNoticeText.txt']], ['semver', ['LICENSE']]]) {

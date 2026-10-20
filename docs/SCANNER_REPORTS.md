@@ -72,8 +72,9 @@ Normal terminal/JSON output retains its existing sensitive-data caveats.
 All displayed text is escaped. CSS is embedded with a SHA-256 CSP; scripts, images,
 fonts, forms and automatic network requests are prohibited. Source locations are
 inert text. Validated official documentation links leave the local report only if
-you follow them manually. No telemetry, history, comparison, upload or browser
-storage is added.
+you follow them manually. HTML alone enables no history. No telemetry, comparison, upload or browser
+storage is added. Explicit opt-in history on this local candidate branch is described
+in [the history guide](SCANNER_HISTORY.md).
 
 Existing destinations, including symlinks/hardlinks/directories, are refused. Files
 are created exclusively with mode 0600, descriptor/ancestor identity checks and

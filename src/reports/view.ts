@@ -168,7 +168,7 @@ export function buildReportView(scan: CompatibilityScanReport, metadata: ReportM
         'Experimental beta. Current bundled production catalog has four historical Stripe/OpenAI records; other supported providers have no curated records.',
         'Static evidence does not establish runtime reachability, production breakage, compatibility or application health. No automatic repair or Cloud monitoring.',
         'Report paths are root-relative and may still identify private code. Unsafe path labels and configuration values are withheld. No source excerpts, absolute target paths or raw arguments are stored in HTML. Review privately before sharing.',
-        'This visual projection intentionally omits sensitive values and quoted warning details; the original local terminal/JSON preserves existing evidence. No history, comparison, telemetry or upload occurs.',
+        'This visual projection intentionally omits sensitive values and quoted warning details; the original local terminal/JSON preserves existing evidence. History requires explicit opt-in. No comparison, telemetry or upload occurs.',
         'Fingerprints identify content, not authenticity. Review dates describe manual curation, not continuous freshness. Source-mode version/build identity may be unavailable.',
         ...scan.warnings, ...scan.coverage.limitations, ...(scan.analysis?.warnings ?? []), ...(scan.analysis?.limitations ?? []), ...scan.compatibility.warnings, ...scan.compatibility.limitations,
       ].map(narrative) }] },
