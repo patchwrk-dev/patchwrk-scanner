@@ -95,7 +95,7 @@ remaining root-relative labels and metadata privately before sharing.
 
 See [the report guide](docs/SCANNER_REPORTS.md) for status meanings, privacy, CSP,
 output errors and residual filesystem/interrupted-write limits. Terminal/JSON output
-and detection stay unchanged. No history, comparison, monitoring or repair is added.
+and detection stay unchanged. HTML alone does not enable history; no comparison, monitoring or repair is added.
 
 ## Reproduce a synthetic finding
 
@@ -253,3 +253,22 @@ The available Scanner remains an offline, read-only experimental beta. It does n
 continuously monitor services, generate repairs, execute scanned code or open pull
 requests. Its supported patterns, limited catalog, uncertainty and security boundaries
 above remain unchanged.
+
+## Local history — unpublished Phase B candidate
+
+This development branch adds explicit local history for review; Phase B is not yet
+merged or advertised as publicly available. Plain scans and HTML-only scans still
+create no history. Initialize a private directory, then supply its project UUID:
+
+```sh
+node dist/index.js history init --directory ./my-history --json
+node dist/index.js scan ./my-project --history-dir ./my-history --project-id PROJECT_UUID
+node dist/index.js history list --directory ./my-history --html ./new-history-list.html
+node dist/index.js history show SCAN_UUID --directory ./my-history --html ./new-historical-report.html
+node dist/index.js history delete SCAN_UUID --directory ./my-history
+```
+
+Deletion/pruning preview by default and require `--apply` to unlink records. No
+automatic history, browser opening, rescanning, deletion, telemetry or Cloud sync.
+[The history guide](docs/SCANNER_HISTORY.md) documents storage, bounds, strict parsing,
+privacy, original evidence, age/keep-last selection and filesystem/interruption risks.

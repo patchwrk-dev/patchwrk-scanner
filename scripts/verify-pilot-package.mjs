@@ -23,7 +23,7 @@ try {
   // Empty prefix and empty npm cache: no project dependencies or registry fallback.
   execFileSync('npm', ['install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', '--package-lock=false', '--no-save', '--prefix', prefix, archive, '--cache', resolve(work, 'empty-npm-cache')], { cwd: work, encoding: 'utf8' });
   const expected = ['LICENSE', 'README.md', 'THIRD_PARTY_NOTICES.txt', 'dist/data/catalog.v1.json', 'dist/index.js', 'licenses/semver.LICENSE', 'licenses/typescript.LICENSE.txt', 'licenses/typescript.ThirdPartyNoticeText.txt', 'package.json'];
-  if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md','docs/SCANNER_REPORTS.md');
+  if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md','docs/SCANNER_REPORTS.md','docs/SCANNER_HISTORY.md');
   expected.sort();
   const packed = execFileSync('tar', ['-tzf', archive], { encoding: 'utf8' }).trim().split('\n').map((file) => file.replace(/^package\//, '')).sort();
   assert.deepEqual(packed, expected);
@@ -88,6 +88,21 @@ registerHooks({ resolve(specifier, context, nextResolve) {
   assert.equal(noOverwrite.status, 1);
   assert.equal(noOverwrite.stdout, '');
   assert.equal(await readFile(htmlPath, 'utf8'), html);
+  const history = resolve(work, 'synthetic history');
+  const project = JSON.parse(run(['history', 'init', '--directory', history, '--json']));
+  assert.equal(run(['scan', fixture, '--json', '--history-dir', history, '--project-id', project.projectId]), json);
+  assert.equal(run(['scan', fixture, '--json', '--history-dir', history, '--project-id', project.projectId]), json);
+  const saved = JSON.parse(run(['history', 'list', '--directory', history, '--json', '--html', resolve(work, 'history-list.html')]));
+  assert.equal(saved.records.length, 2);
+  const first = saved.records[0].scanId;
+  const reopened = JSON.parse(run(['history', 'show', first, '--directory', history, '--json', '--html', resolve(work, 'historical.html')]));
+  assert.ok(!JSON.stringify(reopened).includes(fixture));
+  assert.ok(!JSON.stringify(reopened).includes('SYNTHETIC_PRIVATE_SENTINEL'));
+  assert.match(await readFile(resolve(work, 'historical.html'), 'utf8'), /Historical snapshot/);
+  assert.equal(JSON.parse(run(['history', 'delete', first, '--directory', history, '--json'])).deleted.length, 0);
+  assert.equal(JSON.parse(run(['history', 'delete', first, '--directory', history, '--apply', '--json'])).deleted[0], first);
+  assert.equal(JSON.parse(run(['history', 'list', '--directory', history, '--json'])).records.length, 1);
+  assert.equal(JSON.parse(run(['history', 'prune', '--directory', history, '--project-id', project.projectId, '--keep-last', '0', '--json'])).deleted.length, 0);
   assert.equal(await readFile(resolve(fixture, 'index.ts'), 'utf8'), source);
   assert.equal(await readFile(resolve(fixture, 'package.json'), 'utf8'), manifestText);
   const changes = JSON.parse(run(['changes', '--coverage', '--json']));
@@ -95,6 +110,6 @@ registerHooks({ resolve(specifier, context, nextResolve) {
   assert.equal(changes.catalogCoverage.liveMonitoring, false);
   const invalid = spawnSync(process.execPath, [...args, cli, 'scan', '../outside', '--json'], settings);
   assert.equal(invalid.status, 1);
-  console.log(JSON.stringify({ archive, sha256: digest, installation: 'passed: empty prefix/cache, offline, scripts disabled', runtime: 'self-contained; parent dependencies blocked', network: 'common Node transports denied; help/terminal/JSON/HTML/catalog passed', html: 'privacy/CSP/JSON compatibility/no-overwrite passed', executable: 'passed', targetUnchanged: true, ignoredEnv: true, traversalRejected: true, files: expected, node: process.version }, null, 2));
+  console.log(JSON.stringify({ archive, sha256: digest, installation: 'passed: empty prefix/cache, offline, scripts disabled', runtime: 'self-contained; parent dependencies blocked', network: 'common Node transports denied; help/terminal/JSON/HTML/catalog/history passed', html: 'privacy/CSP/JSON compatibility/no-overwrite passed', history: 'init/two saves/list/reopen/delete preview/apply/prune preview passed', executable: 'passed', targetUnchanged: true, ignoredEnv: true, traversalRejected: true, files: expected, node: process.version }, null, 2));
 } finally { await rm(work, { recursive: true, force: true }); }
 assert.equal(root, process.cwd());

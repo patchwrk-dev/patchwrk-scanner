@@ -9,6 +9,9 @@ import { captureReportContext } from '../reports/context.ts';
 import { buildReportView } from '../reports/view.ts';
 import { formatHtml } from '../reports/html.ts';
 import { writeNewArtifact } from '../artifacts/filesystem.ts';
+import { runHistory, historyHelp } from './history.ts';
+import { LocalScanHistoryRepository } from '../history/repository.ts';
+import { buildSavedScan, uuid } from '../history/validation.ts';
 
 export const help = `PatchWRK Scanner
 
@@ -19,11 +22,14 @@ Usage: patchwrk scan [directory] [--json]
 Commands:
   scan       Discover supported API SDK dependencies and source evidence
   changes    List the local offline change catalog (no live updates)
+  history    Explicit local snapshots; use history --help (no automatic history)
 
 Options:
   --help, -h Show this help
   --json     Print a JSON report
   --html PATH  Save a new self-contained local HTML report (never overwrite)
+  --history-dir DIR  Explicit initialized private history directory
+  --project-id UUID  Required with --history-dir; returned by history init
   --provider NAME    Filter changes by provider
   --max-files N       Maximum files read (default: 2000)
   --max-file-bytes N  Maximum bytes per file (default: 1048576)
@@ -59,7 +65,7 @@ Local offline catalog only; no live retrieval or continuous updates.`;
 export async function runCli(args: string[], output: CliOutput, services: { catalog?: ChangeCatalogRepository } = {}): Promise<number> {
   try {
     if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
-      output.stdout(args[0] === 'changes' ? changesHelp : help);
+      output.stdout(args[0] === 'changes' ? changesHelp : args[0] === 'history' ? historyHelp : help);
       return 0;
     }
     if (args[0] === 'changes') {
@@ -79,11 +85,14 @@ export async function runCli(args: string[], output: CliOutput, services: { cata
       output.stdout(json ? formatChangesJson(report) : formatChangesTerminal(report, coverageOnly));
       return 0;
     }
+    if (args[0] === 'history') return await runHistory(args, output);
     if (args[0] !== 'scan') throw new Error('Unknown command. Use patchwrk --help.');
     let directory: string | undefined;
     let json = false;
     let positionalOnly = false;
     let htmlPath: string | undefined;
+    let historyDir: string | undefined;
+    let projectId: string | undefined;
     const limits: Partial<ScanLimits> = {};
     const analysisLimits: Partial<ModuleLimits> = {};
     const moduleOptions: Record<string, keyof ModuleLimits> = {
@@ -99,6 +108,11 @@ export async function runCli(args: string[], output: CliOutput, services: { cata
       const arg = args[index]!;
       if (!positionalOnly && arg === '--') positionalOnly = true;
       else if (!positionalOnly && arg === '--json') json = true;
+      else if (!positionalOnly && (arg === '--history-dir' || arg === '--project-id')) {
+        if ((arg === '--history-dir' && historyDir !== undefined) || (arg === '--project-id' && projectId !== undefined)) throw new Error('Duplicate history option.');
+        const value = args[++index]; if (!value || value.startsWith('-')) throw new Error('Missing history option value.');
+        if (arg === '--history-dir') historyDir = value; else projectId = uuid(value);
+      }
       else if (!positionalOnly && arg === '--html') {
         if (htmlPath !== undefined) throw new Error('Duplicate --html option.');
         const value = args[++index];
@@ -129,10 +143,21 @@ export async function runCli(args: string[], output: CliOutput, services: { cata
       else directory = arg;
     }
     const options = { scan: { limits, analysisLimits }, apiVersionInputs, ...services };
+    if ((historyDir === undefined) !== (projectId === undefined)) throw new Error('History saving requires both --history-dir and --project-id.');
+    const history = historyDir === undefined ? undefined : await LocalScanHistoryRepository.open(historyDir, projectId);
     const target = directory ?? process.cwd();
-    const context = htmlPath === undefined ? undefined : await captureReportContext(target, options);
+    const context = htmlPath === undefined && !history ? undefined : await captureReportContext(target, options);
     const report = context?.scan ?? await scanWithCompatibility(target, options);
-    if (context && htmlPath !== undefined) await writeNewArtifact(htmlPath, formatHtml(buildReportView(report, context.metadata)));
+    if (context) {
+      const view = buildReportView(report, context.metadata);
+      const saved = history ? buildSavedScan(report, view, projectId!) : undefined;
+      const html = htmlPath === undefined ? undefined : formatHtml(view);
+      if (html !== undefined) await writeNewArtifact(htmlPath!, html);
+      if (history && saved) {
+        try { const id = await history.save(saved); output.stderr(`History saved: ${id}`); }
+        catch { throw new Error(`History save failed; ${html !== undefined ? 'the requested HTML report was saved' : 'no HTML was requested'}. A record may be incomplete; inspect the private directory. No overwrite or automatic cleanup occurred.`); }
+      }
+    }
     output.stdout(json ? formatJson(report) : formatTerminal(report));
     return 0;
   } catch (error) {
