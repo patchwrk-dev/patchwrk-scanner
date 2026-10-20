@@ -23,7 +23,7 @@ try {
   // Empty prefix and empty npm cache: no project dependencies or registry fallback.
   execFileSync('npm', ['install', '--offline', '--ignore-scripts', '--no-audit', '--no-fund', '--package-lock=false', '--no-save', '--prefix', prefix, archive, '--cache', resolve(work, 'empty-npm-cache')], { cwd: work, encoding: 'utf8' });
   const expected = ['LICENSE', 'README.md', 'THIRD_PARTY_NOTICES.txt', 'dist/data/catalog.v1.json', 'dist/index.js', 'licenses/semver.LICENSE', 'licenses/typescript.LICENSE.txt', 'licenses/typescript.ThirdPartyNoticeText.txt', 'package.json'];
-  if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md');
+  if(publicCandidate)expected.push('SECURITY.md','CONTRIBUTING.md','FEEDBACK.md','PUBLIC_PROVENANCE.md','docs/SCANNER_REPORTS.md');
   expected.sort();
   const packed = execFileSync('tar', ['-tzf', archive], { encoding: 'utf8' }).trim().split('\n').map((file) => file.replace(/^package\//, '')).sort();
   assert.deepEqual(packed, expected);
@@ -73,6 +73,21 @@ registerHooks({ resolve(specifier, context, nextResolve) {
   assert.deepEqual(report.integrations.map((item) => item.provider), ['openai', 'stripe']);
   assert.equal(report.compatibility.assessments.find((item) => item.changeId === 'openai.text-davinci-003.retirement').status, 'affected');
   assert.ok(!json.includes('SYNTHETIC_PRIVATE_SENTINEL'));
+  const htmlPath = resolve(work, 'synthetic-report.html');
+  const withHtml = run(['scan', fixture, '--json', '--html', htmlPath]);
+  assert.equal(withHtml, json, 'Optional HTML altered existing JSON');
+  const html = await readFile(htmlPath, 'utf8');
+  assert.match(html, /Content-Security-Policy/);
+  assert.match(html, /Affected/);
+  assert.ok(html.includes(pkg.version), 'Scanner version missing from archive HTML');
+  assert.ok(!html.includes(fixture), 'HTML leaked absolute target');
+  assert.ok(!html.includes('SYNTHETIC_PRIVATE_SENTINEL'));
+  assert.ok(!html.includes('process.env.KEY'));
+  assert.ok(!/<(?:script|img|iframe|form|link)\b/i.test(html));
+  const noOverwrite = spawnSync(process.execPath, [...args, cli, 'scan', fixture, '--json', '--html', htmlPath], settings);
+  assert.equal(noOverwrite.status, 1);
+  assert.equal(noOverwrite.stdout, '');
+  assert.equal(await readFile(htmlPath, 'utf8'), html);
   assert.equal(await readFile(resolve(fixture, 'index.ts'), 'utf8'), source);
   assert.equal(await readFile(resolve(fixture, 'package.json'), 'utf8'), manifestText);
   const changes = JSON.parse(run(['changes', '--coverage', '--json']));
@@ -80,6 +95,6 @@ registerHooks({ resolve(specifier, context, nextResolve) {
   assert.equal(changes.catalogCoverage.liveMonitoring, false);
   const invalid = spawnSync(process.execPath, [...args, cli, 'scan', '../outside', '--json'], settings);
   assert.equal(invalid.status, 1);
-  console.log(JSON.stringify({ archive, sha256: digest, installation: 'passed: empty prefix/cache, offline, scripts disabled', runtime: 'self-contained; parent dependencies blocked', network: 'common Node transports denied; help/terminal/JSON/catalog passed', executable: 'passed', targetUnchanged: true, ignoredEnv: true, traversalRejected: true, files: expected, node: process.version }, null, 2));
+  console.log(JSON.stringify({ archive, sha256: digest, installation: 'passed: empty prefix/cache, offline, scripts disabled', runtime: 'self-contained; parent dependencies blocked', network: 'common Node transports denied; help/terminal/JSON/HTML/catalog passed', html: 'privacy/CSP/JSON compatibility/no-overwrite passed', executable: 'passed', targetUnchanged: true, ignoredEnv: true, traversalRejected: true, files: expected, node: process.version }, null, 2));
 } finally { await rm(work, { recursive: true, force: true }); }
 assert.equal(root, process.cwd());
