@@ -1,3 +1,5 @@
+import { compareSavedScans } from '../comparison/index.ts';
+import { formatComparisonTerminal, formatComparisonJson, formatComparisonHtml } from '../reports/comparison.ts';
 import type { CliOutput } from './run.ts';
 import { LocalScanHistoryRepository } from '../history/repository.ts';
 import { formatHistoryTerminal, formatHistoryHtml, formatSavedTerminal, historySummary } from '../reports/history.ts';
@@ -11,6 +13,7 @@ history init --directory DIR [--json]
 scan TARGET --history-dir DIR --project-id UUID [--json] [--html NEW.html]
 history list --directory DIR [--project-id UUID] [--json] [--html NEW.html]
 history show SCAN_UUID --directory DIR [--json] [--html NEW.html]
+history compare BEFORE_UUID AFTER_UUID --directory DIR [--json] [--html NEW.html]
 history delete SCAN_UUID --directory DIR [--apply] [--json]
 history prune --directory DIR --project-id UUID [--keep-last N] [--older-than-days N] [--apply] [--json]
 
@@ -22,8 +25,8 @@ Records and reports can retain sensitive root-relative labels; inspect privately
 
 export async function runHistory(args: string[], output: CliOutput): Promise<number> {
   const command = args[1];
-  if (!command || !['init', 'list', 'show', 'delete', 'prune'].includes(command)) throw new Error('Unknown history command. Use patchwrk history --help.');
-  const values = new Map<string, string>(); let scanId: string | undefined; let json = false; let apply = false;
+  if (!command || !['init', 'list', 'show', 'delete', 'prune', 'compare'].includes(command)) throw new Error('Unknown history command. Use patchwrk history --help.');
+  const values = new Map<string, string>(); let scanId: string | undefined; let afterId: string | undefined; let json = false; let apply = false;
   const paths = new Set(['--directory', '--project-id', '--html', '--keep-last', '--older-than-days']);
   for (let index = 2; index < args.length; index++) {
     const arg = args[index]!;
@@ -31,16 +34,25 @@ export async function runHistory(args: string[], output: CliOutput): Promise<num
     else if (arg === '--apply' && !apply) apply = true;
     else if (paths.has(arg) && !values.has(arg)) {
       const value = args[++index]; if (!value || value.startsWith('-')) throw new Error('Missing history option value.'); values.set(arg, value);
-    } else if (!arg.startsWith('-') && scanId === undefined && ['show', 'delete'].includes(command)) scanId = uuid(arg);
+    } else if (!arg.startsWith('-') && scanId === undefined && ['show', 'delete', 'compare'].includes(command)) scanId = uuid(arg);
+    else if (!arg.startsWith('-') && command === 'compare' && afterId === undefined) afterId = uuid(arg);
     else throw new Error('Unknown or duplicate history argument.');
   }
-  const allowed: Record<string, string[]> = { init: ['--directory'], list: ['--directory', '--project-id', '--html'], show: ['--directory', '--html'], delete: ['--directory'], prune: ['--directory', '--project-id', '--keep-last', '--older-than-days'] };
+  const allowed: Record<string, string[]> = { compare: ['--directory', '--html'], init: ['--directory'], list: ['--directory', '--project-id', '--html'], show: ['--directory', '--html'], delete: ['--directory'], prune: ['--directory', '--project-id', '--keep-last', '--older-than-days'] };
   if ([...values.keys()].some((key) => !allowed[command]!.includes(key)) || (apply && !['delete', 'prune'].includes(command))) throw new Error('Option not supported for this history command.');
   const dir = values.get('--directory'); if (!dir) throw new Error('History requires an explicit --directory.');
   if (command === 'init') {
     const project = await LocalScanHistoryRepository.init(dir); output.stdout(json ? JSON.stringify(project, null, 2) : `History initialized. Project UUID: ${project.projectId}`); return 0;
   }
+  if (command === 'compare' && (!scanId || !afterId)) throw new Error('History compare requires explicit before and after scan UUIDs.');
   const repo = await LocalScanHistoryRepository.open(dir, values.get('--project-id'));
+  if (command === 'compare') {
+    const comparison = compareSavedScans(await repo.get(scanId!), await repo.get(afterId!));
+    const text = json ? formatComparisonJson(comparison) : formatComparisonTerminal(comparison);
+    const html = values.get('--html');
+    if (html) await writeNewArtifact(html, formatComparisonHtml(comparison));
+    output.stdout(text); return 0;
+  }
   if (command === 'list') {
     const listing = await repo.list(); const html = values.get('--html');
     if (html) await writeNewArtifact(html, formatHistoryHtml(listing));

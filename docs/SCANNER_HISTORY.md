@@ -147,3 +147,62 @@ Local history is a free manual evidence feature. It adds no continuous monitorin
 refreshed provider intelligence, advanced impact analysis, repair, customer-patch
 verification, GitHub repair PR, hosted/team sync, account or billing capability.
 Cloud remains planned and unavailable. Phase C comparison requires separate work.
+
+## Local comparison — unpublished Phase C candidate
+
+This development branch adds comparison for review; Phase C is not advertised as
+merged or publicly available. Compare two explicit saved UUIDs from the same
+initialized history directory:
+
+```sh
+node dist/index.js history compare BEFORE_UUID AFTER_UUID --directory ./my-history
+node dist/index.js history compare BEFORE_UUID AFTER_UUID --directory ./my-history --json
+node dist/index.js history compare BEFORE_UUID AFTER_UUID --directory ./my-history --html ./new-comparison.html
+```
+
+Both records must pass the existing strict schema-1 validator and belong to the
+same project UUID. No legacy raw JSON or HTML import, cross-project override,
+implicit latest selection or target lookup is supported. Argument position defines
+before/after even if clocks are equal or reversed; warnings preserve that distinction.
+The existing private, bounded, identity-checked repository reader is reused. Neither
+record is modified, and comparison does not acquire a mutation lock, rescan source,
+read today's catalog, execute code, open a browser or access the network.
+
+Independent comparison schema 1 contains original Scanner/catalog metadata,
+project/scan IDs, scope, coverage, findings and privacy-filtered saved references.
+Integrations match on provider/package. Assessments match on provider/package,
+change ID, scope/category and a unique saved client reference corroborated by its
+original definition file/line and manifest. Explicit integration-level fallback
+matches only when no client is recorded. Multiple candidates are inconclusive;
+moved/renamed/withheld client scope is never guessed. Historical record fingerprints
+must agree for like-for-like status transitions. Finding references remain evidence,
+not persistent source identities or proof of authenticity.
+
+Categories describe newly detected, no longer detected and unchanged integrations;
+newly recorded, no longer recorded, changed-status, unchanged-status and inconclusive
+assessments. Increased/reduced uncertainty describes transitions into/out of Unknown
+only. Unchanged integration identity can still have different declarations or source
+references. Evidence comparison retains declaration row associations and sorts block
+representations/notes; order changes within a block may conservatively count as an
+evidence difference. No overall health score or runtime outcome is computed.
+
+Scanner version/build, catalog revision/fingerprint/provider coverage, effective
+budgets and supported coverage are compared separately. Missing metadata, truncation,
+partial scope, incompatible context and ambiguous/unmatched assessments are explicit
+limitations. Observed statuses remain visible without recalculation even when causal
+attribution is inconclusive. Hidden raw API declaration values and other omitted
+privacy details cannot be reconstructed: equal displayed context is not proof of
+identical runtime inputs. A missing finding never means fixed, resolved or repaired.
+Any source changes are manual or external; comparison performs no repair.
+
+Terminal output provides summaries; JSON and collapsed dashboard evidence retain the
+full compared privacy-filtered references. HTML uses the Phase A exclusive new-file
+writer, escaping and static hashed-CSS CSP; there are no scripts or external assets.
+Output is capped at 32 MiB and no truncation silently discards results. Two input
+records retain the existing 32 MiB/100,000-node/depth-64 limits each. Matching uses
+bounded maps and sorted keys, not pairwise fuzzy matching. Validation/parsing is not
+a hard CPU/heap sandbox. The two reads are sequential, not an atomic directory
+snapshot; retain immutable records in a stable private directory. Portable filesystem
+race limits, privacy-sensitive relative labels and unauthenticated records remain.
+Invalid/missing/unsafe input and output errors return 1; valid inconclusive comparisons
+return 0 with warnings, not a compatibility verdict. No paid Cloud features are added.
