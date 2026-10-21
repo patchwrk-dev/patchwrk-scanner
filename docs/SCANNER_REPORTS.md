@@ -72,9 +72,10 @@ Normal terminal/JSON output retains its existing sensitive-data caveats.
 All displayed text is escaped. CSS is embedded with a SHA-256 CSP; scripts, images,
 fonts, forms and automatic network requests are prohibited. Source locations are
 inert text. Validated official documentation links leave the local report only if
-you follow them manually. HTML alone enables no history. No telemetry, comparison, upload or browser
-storage is added. Explicit opt-in history on this local candidate branch is described
-in [the history guide](SCANNER_HISTORY.md).
+you follow them manually. Generating HTML alone does not save history or compare scans.
+No telemetry, upload or browser storage is added. Explicit opt-in history and local
+comparison are available in the experimental Scanner beta and described in
+[the history guide](SCANNER_HISTORY.md).
 
 Existing destinations, including symlinks/hardlinks/directories, are refused. Files
 are created exclusively with mode 0600, descriptor/ancestor identity checks and
@@ -98,8 +99,10 @@ identifies build inputs, not the final executable bytes, authenticity or proof o
 detection-algorithm change. Source execution reports unknown version/build identity.
 Finding references hash the provider/package/change and original static client ID
 and manifest scope; they are deterministic for unchanged evidence, not durable
-cross-scan client identities. Line/alias changes may change them. No comparison
-behavior or fix detection is implemented.
+cross-scan client identities. Line/alias changes may change them. Generating a report
+does not compare scans or detect fixes; the separate
+[local comparison command](SCANNER_HISTORY.md#local-comparison) preserves matching
+uncertainties and never proves a fix.
 Scan start/finish and HTML generation timestamps are local UTC wall-clock values,
 not externally attested ordering. The catalog fingerprint hashes the same validated
 snapshot used by assessments, with recursively sorted object keys and preserved

@@ -95,7 +95,8 @@ remaining root-relative labels and metadata privately before sharing.
 
 See [the report guide](docs/SCANNER_REPORTS.md) for status meanings, privacy, CSP,
 output errors and residual filesystem/interrupted-write limits. Terminal/JSON output
-and detection stay unchanged. HTML alone does not enable history; no comparison, monitoring or repair is added.
+and detection stay unchanged. Generating HTML alone does not save history or compare
+scans; those are separate explicit local commands. No monitoring or repair is added.
 
 ## Reproduce a synthetic finding
 
@@ -254,11 +255,11 @@ continuously monitor services, generate repairs, execute scanned code or open pu
 requests. Its supported patterns, limited catalog, uncertainty and security boundaries
 above remain unchanged.
 
-## Local history — unpublished Phase B candidate
+## Local history
 
-This development branch adds explicit local history for review; Phase B is not yet
-merged or advertised as publicly available. Plain scans and HTML-only scans still
-create no history. Initialize a private directory, then supply its project UUID:
+Local scan history (Phase B) is merged into public `main` and available in the
+experimental Scanner beta. Plain scans and HTML-only scans still create no history.
+Initialize a private directory, then supply its project UUID:
 
 ```sh
 node dist/index.js history init --directory ./my-history --json
@@ -273,10 +274,10 @@ automatic history, browser opening, rescanning, deletion, telemetry or Cloud syn
 [The history guide](docs/SCANNER_HISTORY.md) documents storage, bounds, strict parsing,
 privacy, original evidence, age/keep-last selection and filesystem/interruption risks.
 
-### Local comparison — unpublished Phase C candidate
+### Local comparison
 
-On this development branch, compare two explicitly saved local scan IDs without
-rescanning or modifying records:
+Local scan comparison (Phase C) is merged into public `main`. Compare two explicitly
+saved local scan IDs without rescanning or modifying records:
 
 ```sh
 node dist/index.js history compare BEFORE_UUID AFTER_UUID --directory ./my-history --html ./new-comparison.html
@@ -285,5 +286,5 @@ node dist/index.js history compare BEFORE_UUID AFTER_UUID --directory ./my-histo
 Terminal and `--json` comparison are also available. Source movement, incomplete
 coverage and Scanner/catalog differences remain explicit uncertainties. Disappearing
 findings do not prove a fix; source changes are manual or external. See the
-[matching and safety guide](docs/SCANNER_HISTORY.md#local-comparison--unpublished-phase-c-candidate).
-Phase C is a local review candidate, not advertised as merged or released.
+[matching and safety guide](docs/SCANNER_HISTORY.md#local-comparison).
+These are free local Scanner features; Cloud remains planned and unavailable.

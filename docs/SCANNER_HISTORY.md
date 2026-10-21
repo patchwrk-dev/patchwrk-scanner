@@ -1,7 +1,7 @@
-# Local scan history — unpublished Phase B candidate
+# Local scan history
 
-This local development branch implements opt-in history for founder review. Phase B
-is not advertised as merged or publicly available. Use Node 24 and the reviewed build.
+Opt-in local history (Phase B) and local comparison (Phase C) are merged into public
+`main` and available in the experimental Scanner beta. Use Node 24 and a reviewed build.
 No account, database, new dependency, telemetry or network connection is required.
 
 ## Explicit directory and project identity
@@ -43,7 +43,8 @@ local save timestamp, the privacy-filtered Phase A view with original scan times
 Scanner version/build identity (or explicit unknown), catalog revision/fingerprint,
 coverage/unknowns and structured integration/finding identities. Change-record and
 client references are opaque SHA-256 hashes; references may change when source
-positions/aliases change. No comparison is implemented or fix inferred.
+positions/aliases change. Saving a record does not compare scans or infer a fix;
+comparison requires the separate [local comparison command](#local-comparison).
 
 There is no raw source, absolute target path, raw argv, environment value, client
 variable name or credential field in generated records. Only the existing privacy
@@ -146,13 +147,13 @@ never causes silent deletion, guessing or a compatibility pass.
 Local history is a free manual evidence feature. It adds no continuous monitoring,
 refreshed provider intelligence, advanced impact analysis, repair, customer-patch
 verification, GitHub repair PR, hosted/team sync, account or billing capability.
-Cloud remains planned and unavailable. Phase C comparison requires separate work.
+Cloud remains planned and unavailable. Compare saved records with the separate
+[local comparison command](#local-comparison) below.
 
-## Local comparison — unpublished Phase C candidate
+## Local comparison
 
-This development branch adds comparison for review; Phase C is not advertised as
-merged or publicly available. Compare two explicit saved UUIDs from the same
-initialized history directory:
+Local comparison is available in the experimental Scanner beta. Compare two explicit
+saved UUIDs from the same initialized history directory:
 
 ```sh
 node dist/index.js history compare BEFORE_UUID AFTER_UUID --directory ./my-history
