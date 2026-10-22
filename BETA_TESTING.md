@@ -14,45 +14,35 @@ have curated compatibility changes: four narrow historical records. There is no
 continuous monitoring, automatic repair or available PatchWRK Cloud service.
 
 Scanning does not execute target code, install target dependencies or contact API
-providers. Initial source installation needs registry access unless dependencies
-are cached. No API keys, provider account or scanner account is needed. Scan stable
+providers. Downloading the archive requires network access; scanning does not. Optional
+source installation needs registry access unless dependencies are cached. No API keys, provider account or scanner account is needed. Scan stable
 checkouts you are authorized to inspect; portable filesystem checks are not an OS
 sandbox against hostile concurrent changes. Read [SECURITY.md](SECURITY.md).
 
 ## Install and first scan
 
-Use Git, Node.js **24** and pnpm **11.25.0**. macOS and Ubuntu are CI-tested;
-Windows security remains unverified. Commands below assume a macOS/Linux POSIX
-shell. See [README.md](README.md#build-from-reviewed-public-source) for prerequisite
-installation and full instructions. No npm package or release archive is published.
+Use **Node.js 24** and the published [v0.1.0 experimental prerelease](https://github.com/patchwrk-dev/patchwrk-scanner/releases/tag/v0.1.0).
+The [README download/verification steps](README.md#download-prebuilt-scanner) are the
+primary installation route: download the named archive/checksum, verify, extract into
+a new directory and run with Node. No cloning, npm install, pnpm or compilation is
+required. macOS/Ubuntu have CLI test coverage; Windows security is unverified.
+
+From the README's `patchwrk-scanner-beta` directory, replace the authorized path:
 
 ```sh
-node --version
-pnpm --version
-git clone https://github.com/patchwrk-dev/patchwrk-scanner.git
-cd patchwrk-scanner
-git rev-parse HEAD
-# Review the selected source commit before installing.
-pnpm install --frozen-lockfile --ignore-scripts
-pnpm build
-node dist/index.js --help
-node scripts/demo.mjs
+node scanner/package/dist/index.js --help
+node scanner/package/dist/index.js scan /absolute/path/to/authorized-checkout --html ./report.html
+node scanner/package/dist/index.js scan /absolute/path/to/authorized-checkout --json
 ```
 
-The demo scans an existing synthetic OpenAI example, prints actual terminal/JSON
-excerpts and identifies where local raw reports were saved. It does not execute
-that example. Raw reports can contain absolute paths; do not upload them unreviewed.
-
-For your own stable, authorized repository, replace the placeholder below. Stay in
-the scanner checkout; do not run install/build/scripts inside the scan target.
-
-```sh
-node dist/index.js scan /absolute/path/to/authorized-checkout
-node dist/index.js scan /absolute/path/to/authorized-checkout --json
-node dist/index.js changes --coverage --json
-```
+Open the generated report manually. Do not run target installation/build/scripts.
+Use the README's [history](README.md#local-scan-history) and
+[comparison](README.md#compare-scans) instructions for explicitly saved records.
+A valid report can contain affected, unknown or partial findings; it is not a health pass.
 
 ## Reproducible scenarios
+
+**Optional contributor/source-checkout scenarios:** use the [source build](README.md#build-from-reviewed-public-source) only if you want the repository fixtures below. These source-only steps are not required for archive users. Run `node scripts/demo.mjs` after that build for the existing synthetic OpenAI example; it parses the fixture without executing it.
 
 Materialize three **existing synthetic benchmark cases**, using only Node's file
 APIs. This reads their inert source strings; it never imports or executes them.
@@ -82,7 +72,7 @@ node dist/index.js scan .cache/beta-scenarios/stripe-commonjs-legacy-option --js
 
 | Scenario | Try / observe |
 | --- | --- |
-| Installation | Frozen install, build and help above succeed; note Node/pnpm/OS and sanitized errors if not. |
+| Installation | Archive download, checksum, extraction and Node 24 help succeed; note Node/OS and sanitized errors if not. Source tooling is optional. |
 | Supported detection | `multiple-sdks` reports all five SDK identities and relative evidence locations. This is a synthetic check, not an accuracy guarantee. |
 | Missing detection | `unsupported-dynamic-import` contains a dynamic OpenAI import without a literal SDK import/manifest. No integration is reported; this is a known unsupported miss. Distinguish it from a regression in a supported pattern. |
 | Version uncertainty | The OpenAI demo declares 4.0.0 but has no lockfile, so installed version remains unknown. The synthetic Stripe case records 8.0.0 in npm lockfile v3; that metadata does not prove deployed runtime. |
@@ -99,7 +89,7 @@ SDK versions, remote API versions and observed model configuration are separate.
 Known limits include dynamic imports/wrappers, ambiguous modules, unresolved defaults,
 unsupported pnpm/Yarn/Bun lock resolution, incomplete provider catalogs and bounded
 traversal/analysis. No production-health, comprehensive security or accuracy guarantee.
-See [README limitations](README.md#supported-evidence-and-limitations).
+See [README limitations](README.md#known-limitations).
 
 ## Optional feedback after the round opens
 
@@ -123,7 +113,7 @@ findings go through [SECURITY.md](SECURITY.md), never public Issues/Discussions.
 > It's free and open source, an experimental beta for finding supported API SDK
 > evidence and reviewing limited historical compatibility guidance. It scans locally,
 > offline and read-only, without executing target code, telemetry or uploads; initial
-> installation downloads build dependencies. Test only stable repositories you're
+> obtaining the prebuilt archive needs a download and Node 24, with no source build. Test only stable repositories you're
 > authorized to inspect, or start with the synthetic demo. There is no continuous
 > monitoring or automatic repair. Participation and sanitized feedback are voluntary;
 > you can decline, skip questions or stop at any time. Please read the
