@@ -179,11 +179,17 @@ isolation. Empty or unknown results are not compatibility passes. Read the
 and [beta testing guide](BETA_TESTING.md).
 
 Free Scanner offers manual discovery, historical assessments, terminal/JSON/HTML,
-opt-in local history and manual comparison. **PatchWRK Cloud is planned and unavailable.**
+opt-in local history and manual comparison. **PatchWRK Pro is planned and unavailable.**
 There is no continuous monitoring, automatic provider-change intelligence, AI repair,
 automated migration verification, automatic GitHub PRs or Cloud-hosted dashboards.
 
-## VS Code extension — upcoming, not publicly available
+## VS Code extension — locally tested, not publicly available
+
+The unpublished desktop extension has been tested locally with manual scans, reports
+inside VS Code, opt-in history, reopening and chronological comparison. Current tested
+scope is macOS arm64, VS Code 1.137.0 with embedded Node 24; no separate Scanner
+installation or compilation is required. Other platforms and Cursor remain unverified.
+Read the [extension preparation status](docs/VSCODE_EXTENSION.md).
 
 Planned public installation experience: search **PatchWRK Scanner** in VS Code
 Extensions → Install → open a project → click the PatchWRK icon → Run Scan → review
