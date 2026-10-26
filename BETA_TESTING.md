@@ -20,10 +20,13 @@ sandbox against hostile concurrent changes. Read [SECURITY.md](SECURITY.md).
 
 ## Install and first scan
 
-For supported macOS Apple Silicon hosts, [Install for VS Code](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local)
+For Linux x64, macOS Intel x64 and macOS Apple Silicon hosts, [Install for VS Code](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local)
 is the primary path. Confirm publisher **PatchWRK** and ID **PatchWRK.patchwrk-scanner-local**.
-Requires VS Code **1.137.0+** with embedded **Node 24**; other platforms and Cursor
-are unverified, and remote/virtual/web workspaces are unsupported. No separate
+Linux x64 and macOS Intel use v0.2.6; macOS Apple Silicon retains v0.2.5.
+Requires VS Code **1.137.0+** with embedded **Node major 24**. Windows is not yet supported; no Windows package is offered. Cursor,
+Linux ARM64 and Alpine are unverified; remote/virtual/web workspaces are unsupported.
+Linux and Intel acceptance is native automated installed-editor testing, not separate
+human graphical review. See the extension guide for exact tested OS/editor versions. No separate
 Node installation, source build or npm installation is needed for a compatible host.
 Open an authorized stable project → PatchWRK sidebar → Run Scan → Reports Only.
 See the [extension guide](docs/VSCODE_EXTENSION.md) for explicit history setup and comparison.

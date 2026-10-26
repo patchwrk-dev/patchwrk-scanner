@@ -13,12 +13,29 @@ No account, API credentials, source upload, target code execution or automatic r
 
 [**Install for VS Code**](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local)
 
-The current public extension is **PatchWRK: API Compatibility Scanner v0.2.5**,
+The public extension is **PatchWRK: API Compatibility Scanner**,
 published by **PatchWRK**, extension ID `PatchWRK.patchwrk-scanner-local`.
 It uses the normal release channel with no Marketplace Preview designation.
-Supported package: **macOS Apple Silicon (`darwin-arm64`)**. Requires VS Code
-**1.137.0+** with embedded **Node 24**. Other platforms and Cursor are unverified;
-remote, virtual and web workspaces are unsupported.
+
+| Platform | Marketplace target | Public version |
+| --- | --- | --- |
+| Linux x64 | `linux-x64` | 0.2.6 |
+| macOS Intel x64 | `darwin-x64` | 0.2.6 |
+| macOS Apple Silicon | `darwin-arm64` | 0.2.5 |
+
+Requires VS Code **1.137.0+** with embedded **Node.js major 24**. A separate
+system Node installation does not replace the extension-host runtime requirement.
+Windows is not yet supported; no Windows package is offered.
+Cursor, Linux ARM64 and Alpine are unverified.
+Remote, virtual and web workspaces are unsupported.
+
+Linux x64 and macOS Intel passed native automated installed-editor acceptance
+on Ubuntu 24.04.5 x64 and macOS 15.7.9 x64 respectively, with VS Code 1.143.1
+and embedded Node 24.21.0. This covers activation, synthetic scans, reports,
+consented local history, restart persistence, comparison and security checks;
+it does not establish compatibility with every OS/editor version. Separate human
+graphical/native-folder-picker review was not performed for these two platforms.
+macOS Apple Silicon retains the previously founder-verified v0.2.5 release.
 
 Choose Install on the Marketplace page, open an authorized stable local project,
 then click the PatchWRK icon → **Run Scan** → **Reports Only** for a first report.
