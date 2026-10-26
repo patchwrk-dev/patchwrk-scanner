@@ -9,8 +9,28 @@ account, API credentials, separate Scanner installation or source compilation ne
 
 Available publicly in the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local)
 as **PatchWRK: API Compatibility Scanner**, published by **PatchWRK**
-(extension ID `PatchWRK.patchwrk-scanner-local`). Available for **macOS Apple Silicon (`darwin-arm64`)**
-on the normal release channel. Current public version: **0.2.5**, with no Marketplace Preview designation.
+(extension ID `PatchWRK.patchwrk-scanner-local`). Available on the normal release channel, with no Marketplace Preview designation.
+
+| Platform | Marketplace target | Public version |
+| --- | --- | --- |
+| Linux x64 | `linux-x64` | 0.2.6 |
+| macOS Intel x64 | `darwin-x64` | 0.2.6 |
+| macOS Apple Silicon | `darwin-arm64` | 0.2.5 |
+
+Requires VS Code **1.137.0+** with embedded **Node.js major 24**. A separate
+system Node installation does not replace the extension-host runtime requirement.
+Windows is not yet supported; no Windows package is offered.
+Cursor, Linux ARM64 and Alpine are unverified.
+Remote, virtual and web workspaces are unsupported.
+
+Linux x64 and macOS Intel passed native automated installed-editor acceptance
+on Ubuntu 24.04.5 x64 and macOS 15.7.9 x64 respectively, with VS Code 1.143.1
+and embedded Node 24.21.0. This covers activation, synthetic scans, reports,
+consented local history, restart persistence, comparison and security checks;
+it does not establish compatibility with every OS/editor version. Separate human
+graphical/native-folder-picker review was not performed for these two platforms.
+macOS Apple Silicon retains the previously founder-verified v0.2.5 release.
+
 
 ## What you can do
 
@@ -27,10 +47,9 @@ compatibility; an affected finding is not production runtime verification.
 
 ## Install and run
 
-Verified configuration: **VS Code 1.137.0 on macOS arm64**, with its embedded
-**Node.js 24** extension host. The manifest minimum is 1.137.0; a compatible Node 24
-host is also required. Other editor versions, operating systems and Cursor have not
-been certified. Remote, virtual and web workspaces are unsupported.
+Use the platform/version matrix and embedded Node requirement above. No separate
+Node installation, source compilation or dependency installation is needed for a
+compatible local extension host.
 
 1. Open [Install for VS Code](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local)
    and choose **Install**, or find the exact extension ID in VS Code Extensions.
