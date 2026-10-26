@@ -1,12 +1,38 @@
 # PatchWRK Scanner
 
+**Free API Compatibility Scanner — available now.**
 Find third-party API/SDK integration evidence in JavaScript and TypeScript projects.
 Review evidence-backed historical assessments, visual reports and saved scan differences.
 
-**Free, MIT-licensed experimental beta.** Offline, read-only and manually initiated.
+The **Scanner engine is open source under MIT**. Scans are offline, read-only and manually initiated.
 No account, API credentials, source upload, target code execution or automatic repair.
 
 **Get PatchWRK → Run Scan → View Results → Review History → Compare Scans**
+
+## Install for VS Code — recommended
+
+[**Install for VS Code**](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local)
+
+The current public extension is **PatchWRK: API Compatibility Scanner v0.2.5**,
+published by **PatchWRK**, extension ID `PatchWRK.patchwrk-scanner-local`.
+It uses the normal release channel with no Marketplace Preview designation.
+Supported package: **macOS Apple Silicon (`darwin-arm64`)**. Requires VS Code
+**1.137.0+** with embedded **Node 24**. Other platforms and Cursor are unverified;
+remote, virtual and web workspaces are unsupported.
+
+Choose Install on the Marketplace page, open an authorized stable local project,
+then click the PatchWRK icon → **Run Scan** → **Reports Only** for a first report.
+No clone, npm/pnpm, compilation, separate Scanner or separate Node installation is
+needed for a compatible extension host. Enable optional history only after reviewing
+and confirming its private directory outside all open projects. Two saved scans are
+needed to compare; reports-only scans are not saved retroactively.
+
+[Extension guide and privacy limits](docs/VSCODE_EXTENSION.md).
+This repository publishes the Scanner engine; a public source location for the
+VS Code extension adapter has not been verified. MIT licensing alone does not
+establish that all extension source is publicly hosted.
+The verified standalone CLI remains available below; its version is independent of
+the extension version. PatchWRK Pro is an upcoming paid API maintenance platform, not yet available.
 
 ## Download prebuilt Scanner
 
@@ -17,12 +43,11 @@ below use a macOS/Linux POSIX shell with `curl` and `tar`.
 
 [Download Scanner v0.1.0](https://github.com/patchwrk-dev/patchwrk-scanner/releases/download/v0.1.0/patchwrk-scanner-0.1.0.tgz) ·
 [Download checksum](https://github.com/patchwrk-dev/patchwrk-scanner/releases/download/v0.1.0/patchwrk-scanner-0.1.0.tgz.sha256) ·
-[Experimental prerelease notes](https://github.com/patchwrk-dev/patchwrk-scanner/releases/tag/v0.1.0)
+[CLI v0.1.0 prerelease notes](https://github.com/patchwrk-dev/patchwrk-scanner/releases/tag/v0.1.0)
 
 Use the named `.tgz` release asset, **not** GitHub's automatic “Source code” archives.
 No cloning, npm install, pnpm or TypeScript compilation is required. This is a
-manual download/extraction workflow, not one-click installation. npm/Marketplace
-installation is not offered by this project.
+manual download/extraction workflow, not one-click installation. npm installation is not offered. VS Code users can use the Marketplace link above.
 
 In a new directory, download both assets (or save them using the links above):
 
@@ -151,7 +176,7 @@ migration recommendation may itself be outdated.
 ## Security and privacy
 
 - Offline, read-only target scanning: no provider calls, source execution, dependency
-  installation, telemetry or uploads. Network is needed to download the archive only.
+  installation, telemetry or uploads. Downloads and editor/Marketplace services have their own network behavior.
 - Use stable checkouts/private output locations. Symlinks/hardlinks and credential
   paths are excluded; portable path checks are not a hostile-filesystem sandbox.
 - HTML/history omit absolute target paths, raw arguments and source snippets, but
@@ -162,7 +187,7 @@ migration recommendation may itself be outdated.
 
 MIT © 2026 Jovan Simon; [LICENSE](LICENSE) and [ownership provenance](PUBLIC_PROVENANCE.md)
 remain intact. The archive includes third-party licenses/notices. For confidential
-vulnerabilities use [SECURITY.md](SECURITY.md), not public issues. Best-effort beta
+vulnerabilities use [SECURITY.md](SECURITY.md), not public issues. Best-effort
 support, no SLA. [Issues](https://github.com/patchwrk-dev/patchwrk-scanner/issues/new/choose),
 [questions](https://github.com/patchwrk-dev/patchwrk-scanner/discussions) and
 [sanitized feedback](FEEDBACK.md) use existing GitHub channels; no automatic collection.
@@ -176,27 +201,14 @@ entries establish recorded resolution; pnpm/Yarn/Bun locks remain unsupported.
 Traversal/AST budgets may yield partial results and are not hard parser CPU/heap
 isolation. Empty or unknown results are not compatibility passes. Read the
 [detailed discovery/assessment limits](docs/SCANNER_REPORTS.md#detection-and-compatibility-limits)
-and [beta testing guide](BETA_TESTING.md).
+and [developer onboarding guide](BETA_TESTING.md).
 
 Free Scanner offers manual discovery, historical assessments, terminal/JSON/HTML,
-opt-in local history and manual comparison. **PatchWRK Pro is planned and unavailable.**
+opt-in local history and manual comparison. **PatchWRK Pro is an upcoming paid API maintenance platform, not yet available.**
+Official provider monitoring, impact analysis, AI-assisted repairs, scoped testing and
+developer-approved pull requests are planned.
 There is no continuous monitoring, automatic provider-change intelligence, AI repair,
 automated migration verification, automatic GitHub PRs or Cloud-hosted dashboards.
-
-## VS Code extension — locally tested, not publicly available
-
-The unpublished desktop extension has been tested locally with manual scans, reports
-inside VS Code, opt-in history, reopening and chronological comparison. Current tested
-scope is macOS arm64, VS Code 1.137.0 with embedded Node 24; no separate Scanner
-installation or compilation is required. Other platforms and Cursor remain unverified.
-Read the [extension preparation status](docs/VSCODE_EXTENSION.md).
-
-Planned public installation experience: search **PatchWRK Scanner** in VS Code
-Extensions → Install → open a project → click the PatchWRK icon → Run Scan → review
-reports, history and comparisons. This is **not a current installation method**.
-Use the verified GitHub archive above until an extension is published and verified.
-No Marketplace badge or install link is provided. [Required genuine screenshot assets](docs/SCANNER_REPORTS.md#screenshot-assets--pending-approval)
-are documented; no approved captures are available in this update.
 
 ## Build from reviewed public source
 
@@ -216,4 +228,4 @@ node dist/index.js --help
 Source setup may download build dependencies. Do not run these commands in the
 scan target or enable lifecycle scripts indiscriminately. The ordinary npm dry-run
 package is not the self-contained GitHub bundle. Package privacy, license, security
-and experimental limitations remain unchanged. See [CONTRIBUTING.md](CONTRIBUTING.md).
+and technical limitations remain unchanged. See [CONTRIBUTING.md](CONTRIBUTING.md).

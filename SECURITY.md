@@ -1,6 +1,6 @@
-# Security policy — PatchWRK Scanner experimental beta
+# Security policy — PatchWRK Scanner
 
-Current v0.x experimental versions have best-effort support only. No guaranteed
+Current Scanner releases have best-effort support only. No guaranteed
 backports, response times or remediation dates. No third-party audit/certification
 or production compatibility guarantee is claimed.
 
