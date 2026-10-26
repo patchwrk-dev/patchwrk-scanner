@@ -1,17 +1,16 @@
-# First developer beta testing guide
+# PatchWRK Scanner — developer onboarding and optional testing
 
-Preparation for an initial round of **10 consenting external developers**. Nobody
-is enrolled or contacted by this document. Participation and feedback are voluntary;
-stop or skip a scenario at any time. Do not submit feedback until the founder opens
-the round and you choose to participate. No signup, telemetry or automatic upload.
+PatchWRK Scanner is available now. No enrollment or PatchWRK account is required
+to install or run it. Feedback is voluntary; never send credentials, private source
+or sensitive reports. This guide does not contact or enroll anyone.
 
 ## What you are testing
 
-PatchWRK Scanner is free, MIT-licensed and experimental. It runs locally with
+PatchWRK Scanner is a free API Compatibility Scanner. Its engine is open source under MIT. It runs locally with
 **offline, read-only static analysis** of JavaScript/TypeScript. Supported SDK
 identities are Stripe, OpenAI, Anthropic, Shopify and Twilio. Only Stripe/OpenAI
 have curated compatibility changes: four narrow historical records. There is no
-continuous monitoring, automatic repair or available PatchWRK Cloud service.
+continuous monitoring, automatic repair or available PatchWRK Pro service.
 
 Scanning does not execute target code, install target dependencies or contact API
 providers. Downloading the archive requires network access; scanning does not. Optional
@@ -21,9 +20,17 @@ sandbox against hostile concurrent changes. Read [SECURITY.md](SECURITY.md).
 
 ## Install and first scan
 
-Use **Node.js 24** and the published [v0.1.0 experimental prerelease](https://github.com/patchwrk-dev/patchwrk-scanner/releases/tag/v0.1.0).
+For supported macOS Apple Silicon hosts, [Install for VS Code](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local)
+is the primary path. Confirm publisher **PatchWRK** and ID **PatchWRK.patchwrk-scanner-local**.
+Requires VS Code **1.137.0+** with embedded **Node 24**; other platforms and Cursor
+are unverified, and remote/virtual/web workspaces are unsupported. No separate
+Node installation, source build or npm installation is needed for a compatible host.
+Open an authorized stable project → PatchWRK sidebar → Run Scan → Reports Only.
+See the [extension guide](docs/VSCODE_EXTENSION.md) for explicit history setup and comparison.
+
+For the standalone CLI, use **Node.js 24** and the published [v0.1.0 CLI prerelease](https://github.com/patchwrk-dev/patchwrk-scanner/releases/tag/v0.1.0).
 The [README download/verification steps](README.md#download-prebuilt-scanner) are the
-primary installation route: download the named archive/checksum, verify, extract into
+standalone CLI installation route: download the named archive/checksum, verify, extract into
 a new directory and run with Node. No cloning, npm install, pnpm or compilation is
 required. macOS/Ubuntu have CLI test coverage; Windows security is unverified.
 
@@ -91,9 +98,9 @@ unsupported pnpm/Yarn/Bun lock resolution, incomplete provider catalogs and boun
 traversal/analysis. No production-health, comprehensive security or accuracy guarantee.
 See [README limitations](README.md#known-limitations).
 
-## Optional feedback after the round opens
+## Optional sanitized feedback
 
-Use the seven-question [feedback template](FEEDBACK.md#beta-testing-feedback-template).
+Optionally use the existing [feedback template](FEEDBACK.md#beta-testing-feedback-template).
 [Issues](https://github.com/patchwrk-dev/patchwrk-scanner/issues/new/choose) are for
 reproducible installation/detection/version/compatibility bugs, provider requests
 and scoped features. Existing [Discussions](https://github.com/patchwrk-dev/patchwrk-scanner/discussions)
@@ -106,22 +113,3 @@ relative paths; never provide API keys, credentials, environment dumps, private 
 customer data or raw sensitive reports. Do not name a private repository. Each answer
 is optional; no names, emails, company or repository access is requested. Security
 findings go through [SECURITY.md](SECURITY.md), never public Issues/Discussions.
-
-## Invitation draft — not sent
-
-> Would you like to try PatchWRK Scanner in our first small developer testing round?
-> It's free and open source, an experimental beta for finding supported API SDK
-> evidence and reviewing limited historical compatibility guidance. It scans locally,
-> offline and read-only, without executing target code, telemetry or uploads; initial
-> obtaining the prebuilt archive needs a download and Node 24, with no source build. Test only stable repositories you're
-> authorized to inspect, or start with the synthetic demo. There is no continuous
-> monitoring or automatic repair. Participation and sanitized feedback are voluntary;
-> you can decline, skip questions or stop at any time. Please read the
-> [testing guide](https://github.com/patchwrk-dev/patchwrk-scanner/blob/main/BETA_TESTING.md)
-> and [security policy](https://github.com/patchwrk-dev/patchwrk-scanner/blob/main/SECURITY.md)
-> before deciding. No API keys or private source are requested.
-
-Before any outreach or collection, the founder must review this invitation, open
-the round, obtain consent to participation, assign feedback/security responders and
-confirm handling/retention expectations. Do not create a public tester roster or
-claim testers/results exist. Do not promise removal of public posts or their copies.
