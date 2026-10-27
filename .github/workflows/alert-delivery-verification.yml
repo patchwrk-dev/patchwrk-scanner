@@ -1,0 +1,15 @@
+name: Isolated business alert delivery verification
+on:
+  push:
+    branches: [task096h-alert-delivery-test]
+    paths: [.github/workflows/alert-delivery-verification.yml]
+permissions: {}
+jobs:
+  expected-failure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    steps:
+      - name: Deliberate isolated notification drill
+        run: |
+          printf '%s\n' 'APPROVED ALERT DELIVERY DRILL: intentional isolated failure; production monitors unaffected.'
+          exit 1
