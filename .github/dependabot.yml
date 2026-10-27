@@ -1,0 +1,23 @@
+# Prepared only: install as .github/dependabot.yml after founder approval.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: America/Chicago
+    open-pull-requests-limit: 3
+    groups:
+      vitest-family:
+        patterns: ['vitest', '@vitest/*']
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:15'
+      timezone: America/Chicago
+    open-pull-requests-limit: 3
