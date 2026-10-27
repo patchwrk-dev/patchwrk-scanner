@@ -1,0 +1,42 @@
+name: Scheduled Scanner regression
+on:
+  schedule:
+    - cron: '23 3 * * *'
+      timezone: America/Chicago
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: scheduled-scanner-regression
+  cancel-in-progress: false
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Verify target and available inputs
+        env:
+          OBSERVED_REPOSITORY: ${{ github.repository }}
+        run: |
+          test "$OBSERVED_REPOSITORY" = 'patchwrk-dev/patchwrk-scanner'
+          test -f pnpm-workspace.yaml
+          node -p 'JSON.stringify({platform:process.platform,arch:process.arch,node:process.version})'
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm benchmark
+      - run: pnpm build
+      - run: pnpm package:check
+      - run: node scripts/create-pilot-package.mjs --public-candidate
+      - run: node scripts/verify-pilot-package.mjs --public-candidate
