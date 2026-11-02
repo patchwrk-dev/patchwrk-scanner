@@ -1,0 +1,24 @@
+# INACTIVE TEMPLATE. Replace the Action SHA only after reviewed publication.
+name: PatchWRK static scan
+on:
+  workflow_dispatch:
+  push:
+permissions:
+  contents: read
+concurrency:
+  group: patchwrk-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+      - uses: patchwrk-dev/patchwrk-scanner/action@FULL_REVIEWED_ACTION_COMMIT_SHA
+        with:
+          path: '.'

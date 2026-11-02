@@ -1,0 +1,8 @@
+PatchWRK Action bundles the public PatchWRK Scanner engine (MIT, Jovan Simon),
+TypeScript 5.9.3 (Apache-2.0) and semver 7.8.5 (ISC).
+License and upstream notices accompany this distribution in licenses/.
+Only Node builtins remain external. No user repository dependencies are installed.
+The existing TypeScript optional source-map-support debugging hook is bundled as
+an inert no-op; it cannot resolve optional packages from the scanned checkout.
+This affects optional compiler debug stack mapping, not scan rules/assertions.
+No customer code is included in the build.

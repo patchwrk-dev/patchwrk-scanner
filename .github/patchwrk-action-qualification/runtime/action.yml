@@ -1,0 +1,8 @@
+name: PatchWRK qualification runtime probe
+description: Trusted producer test helper, not a consumer Action
+outputs:
+  node:
+    description: Actual runner-selected Node24 executable for bounded tests
+runs:
+  using: node24
+  main: main.mjs

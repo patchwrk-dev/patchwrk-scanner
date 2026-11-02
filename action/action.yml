@@ -1,0 +1,15 @@
+name: PatchWRK Free Scanner
+description: Bounded offline read-only API SDK discovery and historical compatibility findings
+inputs:
+  path:
+    description: Relative directory inside the checked-out workspace
+    required: false
+    default: '.'
+outputs:
+  result:
+    description: Privacy-minimized JSON with aggregate discovery and per-change status counts
+  status:
+    description: complete or partial; execution errors fail the step
+runs:
+  using: node24
+  main: dist/index.mjs

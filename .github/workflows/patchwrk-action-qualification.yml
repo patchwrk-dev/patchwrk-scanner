@@ -1,0 +1,42 @@
+# INACTIVE REVIEW PACKET. Install only after founder approval at the mapped path.
+# Trigger is a reviewed producer-branch push, not an untrusted PR or dispatch.
+name: PatchWRK bounded Action qualification
+on:
+  push:
+    branches: [qualification/patchwrk-action-node24]
+permissions:
+  contents: read
+concurrency:
+  group: patchwrk-action-qualification-v1
+  cancel-in-progress: false
+jobs:
+  qualify:
+    if: github.repository == 'patchwrk-dev/patchwrk-scanner' && github.ref == 'refs/heads/qualification/patchwrk-action-node24' && github.event.deleted == false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          path: trusted
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+      - id: runtime
+        uses: ./trusted/.github/patchwrk-action-qualification/runtime
+      - name: Prepare inert synthetic input
+        env:
+          QUALIFICATION_NODE: ${{ steps.runtime.outputs.node }}
+        run: '"$QUALIFICATION_NODE" trusted/.github/patchwrk-action-qualification/prepare.mjs'
+      - id: scan
+        # ONLY a trusted producer push checkout at the reviewed SHA; never PR-local code.
+        uses: ./trusted/action
+        with:
+          path: synthetic
+      - name: Verify outputs and native failure contracts
+        env:
+          QUALIFICATION_NODE: ${{ steps.runtime.outputs.node }}
+          QUALIFICATION_RESULT: ${{ steps.scan.outputs.result }}
+          QUALIFICATION_STATUS: ${{ steps.scan.outputs.status }}
+        run: '"$QUALIFICATION_NODE" trusted/.github/patchwrk-action-qualification/verify.mjs'

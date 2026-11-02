@@ -5,4 +5,5 @@ export default tseslint.config(
   { ignores: ['dist/**', 'node_modules/**', 'apps/**', '.cache/**', 'artifacts/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  { languageOptions: { parserOptions: { tsconfigRootDir: import.meta.dirname } } },
 );

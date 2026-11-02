@@ -1,0 +1,25 @@
+# INACTIVE TEMPLATE. Hosted fork acceptance is required before this is supported.
+# Scans the default pull_request merge checkout, not an unverified head/base claim.
+name: PatchWRK static PR scan
+on:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: patchwrk-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+          submodules: false
+          lfs: false
+      # Trusted remote implementation; never ./action from the untrusted checkout.
+      - uses: patchwrk-dev/patchwrk-scanner/action@FULL_REVIEWED_ACTION_COMMIT_SHA
+        with:
+          path: '.'
