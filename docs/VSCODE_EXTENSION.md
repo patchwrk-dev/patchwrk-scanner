@@ -20,7 +20,9 @@ as **PatchWRK: API Compatibility Scanner**, published by **PatchWRK**
 Requires VS Code **1.137.0+** with embedded **Node.js major 24**. A separate
 system Node installation does not replace the extension-host runtime requirement.
 Windows is not yet supported; no Windows package is offered.
-Cursor, Linux ARM64 and Alpine are unverified.
+Linux ARM64 and Alpine are unverified. Cursor has a separately qualified macOS
+ARM64 manual VSIX; use the Cursor release linked in the repository README,
+not this VS Code package.
 Remote, virtual and web workspaces are unsupported.
 
 Linux x64 and macOS Intel passed native automated installed-editor acceptance
