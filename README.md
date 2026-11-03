@@ -1,13 +1,64 @@
-# PatchWRK Scanner
+# PatchWRK Free Scanner
 
-**Free API Compatibility Scanner — available now.**
-Find third-party API/SDK integration evidence in JavaScript and TypeScript projects.
-Review evidence-backed historical assessments, visual reports and saved scan differences.
+Find supported third-party API SDK integrations in JavaScript/TypeScript and
+review potential compatibility risks against documented historical changes.
+Use the evidence and explicit unknowns to decide what to investigate next.
 
-The **Scanner engine is open source under MIT**. Scans are offline, read-only and manually initiated.
-No account, API credentials, source upload, target code execution or automatic repair.
+Scanner reads code without executing or changing it, fetching provider updates,
+or sending source to PatchWRK. No PatchWRK account or API key is required.
+The Scanner engine is MIT open source; full editor adapter source is not
+claimed to be publicly hosted. GitHub Action scans run on GitHub infrastructure.
+Editor/CLI scans are manually initiated; Action scans also run on explicitly
+configured CI events.
 
-**Get PatchWRK → Run Scan → View Results → Review History → Compare Scans**
+## Choose your installation
+
+| Use it in | Install and first result | Supported scope |
+| --- | --- | --- |
+| VS Code | [Marketplace](https://marketplace.visualstudio.com/items?itemName=PatchWRK.patchwrk-scanner-local) → PatchWRK sidebar → Run Scan → Reports Only. [Guide](docs/VSCODE_EXTENSION.md). | Linux x64 / macOS Intel 0.2.6; macOS ARM64 0.2.5. VS Code 1.137.0+ and embedded Node 24. |
+| Cursor | [Manual VSIX release and checksum](https://github.com/patchwrk-dev/patchwrk-scanner/releases/tag/cursor-v0.2.7). Read the attached installation guide, verify SHA-256, then Extensions: Install from VSIX… → Run Scan → Reports Only. | macOS Apple Silicon ARM64 0.2.7 only; qualified on Cursor 3.27.22 / API 1.128.0 / embedded Node 24.19.0. Manual updates. |
+| GitHub Action | [Installation guide](https://github.com/patchwrk-dev/patchwrk-scanner/releases/download/action-v0.1.0/GITHUB_ACTION_USAGE.md) and [manual/main-push workflow](https://github.com/patchwrk-dev/patchwrk-scanner/releases/download/action-v0.1.0/manual-push.yml.example). Review and commit the example in your own repository, then inspect the job summary. | GitHub.com public repos; standard ubuntu-24.04 Linux x64 / Node24. Qualified main push, default-main manual dispatch and PR opened cases only. |
+
+Action pin: `patchwrk-dev/patchwrk-scanner/action@542affc4913b5c3ee55b506470f36dc0304b17fb`.
+Keep the example's pinned checkout, read-only permissions, disabled persisted
+credentials and timeout. Read fork restrictions before using the separate PR example.
+A successful step or empty report does not prove compatibility.
+
+Discovery covers Stripe, OpenAI, Anthropic, Shopify and Twilio. Compatibility
+coverage is limited to four historical Stripe/OpenAI records. No live monitoring,
+AI repairs, automatic migrations or automatic PRs. Windows, Linux ARM64 and Alpine
+editor packages are unsupported. Cursor Intel/Linux/Windows and remote/web/virtual
+editor workspaces are unqualified; Action private repos, GHES and other runner
+platforms are unqualified. Other host versions are not separately qualified.
+
+## Example: investigate a potential Stripe compatibility risk
+
+Create a new synthetic folder containing these two files; do not install its
+dependencies or execute the example.
+
+`package.json`:
+
+    {"name":"patchwrk-synthetic-launch-demo","private":true,"dependencies":{"stripe":"12.0.0"}}
+
+`src/index.ts`:
+
+    import Stripe from 'stripe';
+    const client = new Stripe('SYNTHETIC_NOT_A_CREDENTIAL');
+    void client;
+
+Scan that stable folder using the Reports Only flow above. In the verified
+packaged-engine demonstration (November 2, 2026), Scanner read two files and
+reported one Stripe discovery and two potentially-affected findings:
+`stripe.sdk12.removed-constructor-aliases` and `stripe.sdk8.request-option-rename`.
+There were zero affected and zero unknown assessments, with no truncated coverage.
+
+These are historical catalog matches, not confirmed broken code. The package
+file declares a version; it does not prove an installed dependency. This snippet
+does not use the removed constructor aliases. Inspect actual usage and resolved
+versions, then consult the [Stripe v12 migration guide](https://github.com/stripe/stripe-node/wiki/Migration-guide-for-v12)
+and write your own tests before changing a project. The second v8 advisory is
+also potential; it does not mean Stripe v8 was detected. No findings would not
+guarantee compatibility.
 
 ## Install for VS Code — recommended
 
@@ -26,7 +77,9 @@ It uses the normal release channel with no Marketplace Preview designation.
 Requires VS Code **1.137.0+** with embedded **Node.js major 24**. A separate
 system Node installation does not replace the extension-host runtime requirement.
 Windows is not yet supported; no Windows package is offered.
-Cursor, Linux ARM64 and Alpine are unverified.
+Linux ARM64 and Alpine are unverified. Cursor has a separately qualified macOS
+ARM64 manual VSIX; use the Cursor release linked in the repository README,
+not this VS Code package.
 Remote, virtual and web workspaces are unsupported.
 
 Linux x64 and macOS Intel passed native automated installed-editor acceptance
